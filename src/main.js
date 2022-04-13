@@ -2,7 +2,7 @@
 
 let config = {
     type: Phaser.AUTO,
-    scene: [Menu],
+    scene: [Menu, Play],
     scale: {
         width: 500,
         height: 700,
@@ -12,3 +12,6 @@ let config = {
 };
 
 let game = new Phaser.Game(config);
+
+// set aside keybinds
+let keyA, keyD, keySPACE;
