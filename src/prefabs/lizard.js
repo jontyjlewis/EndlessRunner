@@ -11,10 +11,10 @@ class Lizard extends Phaser.GameObjects.Sprite {
     update() {
         // horizontal movement
         if(Phaser.Input.Keyboard.JustDown(keyA)) {
-            this.x -= 150;
+            this.x -= 140;
         }
         else if(Phaser.Input.Keyboard.JustDown(keyD)) {
-            this.x += 150;
+            this.x += 140;
         }
 
         // if(Phaser.Input.Keyboard.JustDown(keySPACE)) {

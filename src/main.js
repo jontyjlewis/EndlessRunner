@@ -4,7 +4,7 @@ let config = {
     type: Phaser.AUTO,
     scene: [Menu, Play],
     scale: {
-        width: 400,
+        width: 420,
         height: 600,
         autoCenter: Phaser.Scale.CENTER_BOTH,
         mode: Phaser.Scale.FIT,
