@@ -3,9 +3,8 @@ class Lizard extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, texture, frame) {
         super(scene, x, y, texture, frame);
 
-        // add object to the existing scene
-        scene.add.existing(this);
-        this.moveSpeed = 5;
+        scene.add.existing(this);   // add object to the existing scene
+        this.isJumping = false;          // jumping logic
     }
 
     update() {
@@ -17,8 +16,20 @@ class Lizard extends Phaser.GameObjects.Sprite {
             this.x += game.config.width/4;
         }
 
+        // Jump
         // if(Phaser.Input.Keyboard.JustDown(keySPACE)) {
-        //     this.y += 200;
+        //     console.log('jumping!');
+        //     this.time.delayedCall(1000, jump, null, this);
+        // }
+        // else {
+        //     console.log('not jumping');
+        //     this.isJumping = false;
         // }
     }
+    jump() {
+        console.log('not Jumping!');
+    }
 }
+// function jump() {
+//     console.log('not jumping!');
+// }

@@ -1,4 +1,8 @@
-// console.log("Hello from main.js");
+// Developers:  Jonathan Lewis
+//              ---
+//              ---
+// Date: Started 4/13/2022
+// Project: Endless Runner for CMPM 120 / ARTG 120 @ UCSC Spring 2022
 
 let config = {
     type: Phaser.CANVAS,
@@ -12,8 +16,8 @@ let config = {
 };
 let game = new Phaser.Game(config);
 
-let borderUISize = config.height / 20;  // should be 20px
-let borderpadding = borderUISize / 2;   // 10px
+let borderUISize = config.height / 30;  // should be 20px
+let borderpadding = borderUISize / 2;   // 15px
 
 // set aside keybinds
 let keyA, keyD, keySPACE;
