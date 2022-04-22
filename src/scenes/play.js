@@ -14,6 +14,8 @@ class Play extends Phaser.Scene {
         // snake
         this.load.image('snake', './assets/snake.png');
         // birb
+        this.load.image('bird', './assets/bird.png');
+        this.load.image('alert', './assets/alert.png');
         // dwayne johnson
         this.load.image('rock', './assets/rock.png');
 
@@ -66,6 +68,10 @@ class Play extends Phaser.Scene {
         // Rock
         this.rock1 = new Rock(this, game.config.width/2 + game.config.width/4, game.config.height, 'rock').setOrigin(0.5, 0);
 
+        // Bird
+        this.bird1 = new Bird(this, game.config.width/2, 0, 'bird').setOrigin(0.5, 0);
+        this.alert1 = this.add.sprite(game.config.width/2, game.config.height - borderUISize - borderpadding, 'alert').setOrigin(0.5, 0);
+
         // border art
         this.border1 = this.add.tileSprite(0, 0, 420, 600, 'border1').setOrigin(0, 0);
         this.border2 = this.add.tileSprite(0, 0, 420, 600, 'border2').setOrigin(0, 0);
@@ -88,6 +94,14 @@ class Play extends Phaser.Scene {
         this.branch3.update();
         this.snake1.update();
         this.rock1.update();
+        this.bird1.update();
+
+        if(this.bird1.alert == true) {
+            this.alert1.alpha = 1;
+        }
+        else {
+            this.alert1.alpha = 0;
+        }
 
         // jumping logic
         if(Phaser.Input.Keyboard.JustDown(keySPACE)) {
