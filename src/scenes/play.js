@@ -104,13 +104,16 @@ class Play extends Phaser.Scene {
         }
 
         // jumping logic
-        if(Phaser.Input.Keyboard.JustDown(keySPACE)) {
+        if(Phaser.Input.Keyboard.JustDown(keySPACE) && 
+        this.p1Lizard.isJumping == false) {
             console.log('jumping!');
             this.p1Lizard.isJumping = true;
             this.p1Lizard.alpha = 0.5;
             this.time.delayedCall(1000, jump, null, this);
         }
-        if(Phaser.Input.Keyboard.JustDown(keyW) && this.p1Lizard.y == game.config.height - borderUISize - borderpadding * 10) {
+        if(Phaser.Input.Keyboard.JustDown(keyW) && 
+        this.p1Lizard.y == this.p1Lizard.bottomOfScreen &&
+        this.p1Lizard.isJumping == false) {
             console.log('dash!');
             this.p1Lizard.isDash = true;
             // this.p1Lizard.y -= 100;
