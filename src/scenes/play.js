@@ -43,7 +43,7 @@ class Play extends Phaser.Scene {
 
 
         // Player
-        this.p1Lizard = new Lizard(this, game.config.width/2, game.config.height - borderUISize - borderpadding*2, 'lizard').setOrigin(0.5, 1);
+        this.p1Lizard = new Lizard(this, game.config.width/2, game.config.height - borderUISize - borderpadding*10, 'lizard').setOrigin(0.5, 0);
 
         // Player/Lizard Keybinds
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -52,7 +52,9 @@ class Play extends Phaser.Scene {
 
         // Entities
         // branch
-        this.branch1 = new Branch(this, game.config.width/4 - borderUISize, game.config.height, 'branch').setOrigin(0.5, 0);
+        this.branch1 = new Branch(this, game.config.width/2 - game.config.width/3, game.config.height - 500, 'branch').setOrigin(0.5, 0);
+        this.branch2 = new Branch(this, game.config.width/2 + game.config.width/3, game.config.height - 250, 'branch').setOrigin(0.5, 0);
+        this.branch3 = new Branch(this, game.config.width/2, game.config.height, 'branch').setOrigin(0.5, 0);
 
         
     }
@@ -63,14 +65,25 @@ class Play extends Phaser.Scene {
 
         this.p1Lizard.update();
         this.branch1.update();
+        this.branch2.update();
+        this.branch3.update();
+
+        // jumping logic
         if(Phaser.Input.Keyboard.JustDown(keySPACE)) {
             console.log('jumping!');
             this.p1Lizard.isJumping = true;
+            this.p1Lizard.alpha = 0.5;
             this.time.delayedCall(1000, jump, null, this);
         }
 
         // check collision w/ branch
         if (this.checkCollisionBranch(this.p1Lizard, this.branch1)) {
+            console.log('hit branch');
+        }
+        if (this.checkCollisionBranch(this.p1Lizard, this.branch2)) {
+            console.log('hit branch');
+        }
+        if (this.checkCollisionBranch(this.p1Lizard, this.branch3)) {
             console.log('hit branch');
         }
     }
@@ -79,7 +92,7 @@ class Play extends Phaser.Scene {
         if((lizard.x < branch.x + branch.width &&
             lizard.x + lizard.width > branch.x &&
             lizard.y < branch.y + branch.height &&
-            lizard.y + lizard.height > branch.y) &&
+            lizard.y + lizard.height/2 > branch.y) &&
             this.p1Lizard.isJumping == false) {
                 return true;
             }
@@ -91,4 +104,5 @@ class Play extends Phaser.Scene {
 function jump() {
     console.log('not jumping!');
     this.p1Lizard.isJumping = false;
+    this.p1Lizard.alpha = 1;
 }
