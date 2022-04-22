@@ -15,6 +15,7 @@ class Play extends Phaser.Scene {
         this.load.image('snake', './assets/snake.png');
         // birb
         // dwayne johnson
+        this.load.image('rock', './assets/rock.png');
 
         // Background & border
         this.load.image('background', './assets/Background/background.png');
@@ -62,6 +63,10 @@ class Play extends Phaser.Scene {
         // Snek
         this.snake1 = new Snake(this, -370, 0, 'snake').setOrigin(0, 0);
 
+        // Rock
+        this.rock1 = new Rock(this, game.config.width/2 + game.config.width/4, game.config.height, 'rock').setOrigin(0.5, 0);
+
+        // border art
         this.border1 = this.add.tileSprite(0, 0, 420, 600, 'border1').setOrigin(0, 0);
         this.border2 = this.add.tileSprite(0, 0, 420, 600, 'border2').setOrigin(0, 0);
         this.border3 = this.add.tileSprite(0, 0, 420, 600, 'border3').setOrigin(0, 0);
@@ -72,16 +77,17 @@ class Play extends Phaser.Scene {
 
     update() {
         // background
-        this.background.tilePositionY -= 5;
-        this.border1.tilePositionY -= 5;
-        this.border2.tilePositionY -= 5.3;
-        this.border3.tilePositionY -= 5.5;
+        this.background.tilePositionY -= 3;
+        this.border1.tilePositionY -= 3;
+        this.border2.tilePositionY -= 3.3;
+        this.border3.tilePositionY -= 3.5;
 
         this.p1Lizard.update();
         this.branch1.update();
         this.branch2.update();
         this.branch3.update();
         this.snake1.update();
+        this.rock1.update();
 
         // jumping logic
         if(Phaser.Input.Keyboard.JustDown(keySPACE)) {
@@ -112,6 +118,11 @@ class Play extends Phaser.Scene {
         if (this.checkCollisionSnake(this.p1Lizard, this.snake1)) {
             console.log('hit snake');
         }
+
+        // check collision w/ rock
+        if (this.checkCollisionRock(this.p1Lizard, this.rock1)) {
+            console.log('hit rock');
+        }
     }
 
     checkCollisionBranch(lizard, branch) {
@@ -132,6 +143,19 @@ class Play extends Phaser.Scene {
             lizard.x + lizard.width > snake.x &&
             lizard.y < snake.y + snake.height &&
             lizard.y + lizard.height/2 > snake.y) {
+                return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    checkCollisionRock(lizard, rock) {
+        if((lizard.x < rock.x + rock.width &&
+            lizard.x + lizard.width > rock.x &&
+            lizard.y < rock.y + rock.height &&
+            lizard.y + lizard.height/2 > rock.y) &&
+            rock.alpha == 1) {
                 return true;
         }
         else {

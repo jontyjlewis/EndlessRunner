@@ -1,4 +1,4 @@
-class Branch extends Phaser.GameObjects.Sprite {
+class Rock extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, texture, frame) {
         super(scene, x, y, texture, frame);
 
@@ -8,12 +8,18 @@ class Branch extends Phaser.GameObjects.Sprite {
 
     update() {
 
-        // move branch down the screen
+        // move rock down the screen
         this.y += this.moveSpeed;
 
-        // move branch to top of screen
+        if(this.y >= -50) {
+            this.alpha += 0.008;
+        }
+
+
+        // move rock to top of screen
         if(this.y >= game.config.height) {
             this.y = 0 - game.config.height;
+            this.alpha = 0;
         }
     }
 }
