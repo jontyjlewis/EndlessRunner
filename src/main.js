@@ -20,4 +20,4 @@ let borderUISize = config.height / 30;  // should be 20px
 let borderpadding = borderUISize / 2;   // 15px
 
 // set aside keybinds
-let keyA, keyD, keySPACE;
+let keyA, keyD, keyW, keySPACE;

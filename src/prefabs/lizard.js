@@ -5,6 +5,8 @@ class Lizard extends Phaser.GameObjects.Sprite {
 
         scene.add.existing(this);   // add object to the existing scene
         this.isJumping = false;          // jumping logic
+        this.isDash = false;
+        this.moveSpeed = 3;
     }
 
     update() {
@@ -16,6 +18,17 @@ class Lizard extends Phaser.GameObjects.Sprite {
             this.x += game.config.width/4;
         }
 
+        if(this.isDash == true) {
+            this.y -= this.moveSpeed;
+        }
+        else if(this.y < game.config.height - borderUISize - borderpadding * 10) {
+            this.y += this.moveSpeed;
+        }
+        // Dash
+        // if(Phaser.Input.Keyboard.JustDown(keyW)) {
+        //     this.y -= 100;
+        // }
+
         // Jump
         // if(Phaser.Input.Keyboard.JustDown(keySPACE)) {
         //     console.log('jumping!');
@@ -26,8 +39,11 @@ class Lizard extends Phaser.GameObjects.Sprite {
         //     this.isJumping = false;
         // }
     }
-    jump() {
-        console.log('not Jumping!');
+    // jump() {
+    //     console.log('not Jumping!');
+    // }
+    reset() {
+        this.y = game.config.height - borderUISize - borderpadding * 10;
     }
 }
 // function jump() {
