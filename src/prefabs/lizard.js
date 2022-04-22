@@ -7,6 +7,7 @@ class Lizard extends Phaser.GameObjects.Sprite {
         this.isJumping = false;          // jumping logic
         this.isDash = false;
         this.moveSpeed = 3;
+        this.bottomOfScreen = game.config.height - borderUISize - borderpadding * 10;
     }
 
     update() {
@@ -21,7 +22,7 @@ class Lizard extends Phaser.GameObjects.Sprite {
         if(this.isDash == true) {
             this.y -= this.moveSpeed;
         }
-        else if(this.y < game.config.height - borderUISize - borderpadding * 10) {
+        else if(this.y < this.bottomOfScreen) {
             this.y += this.moveSpeed;
         }
         // Dash
@@ -43,7 +44,7 @@ class Lizard extends Phaser.GameObjects.Sprite {
     //     console.log('not Jumping!');
     // }
     reset() {
-        this.y = game.config.height - borderUISize - borderpadding * 10;
+        this.y = this.bottomOfScreen;
     }
 }
 // function jump() {

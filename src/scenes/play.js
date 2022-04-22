@@ -16,12 +16,15 @@ class Play extends Phaser.Scene {
         // birb
         // dwayne johnson
 
-        // Background
+        // Background & border
         this.load.image('background', './assets/Background/background.png');
+        this.load.image('border1', './assets/Background/border1.png');
+        this.load.image('border2', './assets/Background/border2.png');
+        this.load.image('border3', './assets/Background/border3.png');
     }
 
     create() {
-        // background
+        // background & border
         this.background = this.add.tileSprite(0, 0, 420, 600, 'background').setOrigin(0, 0);
 
         // Grid overlay
@@ -53,20 +56,26 @@ class Play extends Phaser.Scene {
 
         // Borders
         // this.add.rectangle(0, 0, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0,0);
-	    this.add.rectangle(0, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0 ,0);
-	    this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0 ,0);
-
-        // warning zone box
-        // this.add.rectangle(0, game.config.height - borderUISize - borderpadding, game.config.width, borderUISize + borderpadding, 0xFF0000).setOrigin(0 ,0);
+	    // this.add.rectangle(0, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0 ,0);
+	    // this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0 ,0);
 
         // Snek
         this.snake1 = new Snake(this, -370, 0, 'snake').setOrigin(0, 0);
-        
+
+        this.border1 = this.add.tileSprite(0, 0, 420, 600, 'border1').setOrigin(0, 0);
+        this.border2 = this.add.tileSprite(0, 0, 420, 600, 'border2').setOrigin(0, 0);
+        this.border3 = this.add.tileSprite(0, 0, 420, 600, 'border3').setOrigin(0, 0);
+
+        // warning zone box
+        // this.add.rectangle(0, game.config.height - borderUISize - borderpadding, game.config.width, borderUISize + borderpadding, 0xFF0000).setOrigin(0 ,0);
     }
 
     update() {
         // background
         this.background.tilePositionY -= 5;
+        this.border1.tilePositionY -= 5;
+        this.border2.tilePositionY -= 5.3;
+        this.border3.tilePositionY -= 5.5;
 
         this.p1Lizard.update();
         this.branch1.update();
