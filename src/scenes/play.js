@@ -137,6 +137,11 @@ class Play extends Phaser.Scene {
         if (this.checkCollisionRock(this.p1Lizard, this.rock1)) {
             console.log('hit rock');
         }
+
+        // check collision w/ bird
+        if (this.checkCollisionRock(this.p1Lizard, this.bird1)) {
+            console.log('birb got u');
+        }
     }
 
     checkCollisionBranch(lizard, branch) {
@@ -170,6 +175,19 @@ class Play extends Phaser.Scene {
             lizard.y < rock.y + rock.height &&
             lizard.y + lizard.height/2 > rock.y) &&
             rock.alpha == 1) {
+                return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    checkCollisionBird(lizard, bird) {
+        if((lizard.x < bird.x + bird.width &&
+            lizard.x + lizard.width > bird.x &&
+            lizard.y < bird.y + bird.height &&
+            lizard.y + lizard.height/2 > bird.y) &&
+            bird.alpha == 1) {
                 return true;
         }
         else {

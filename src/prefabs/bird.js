@@ -11,7 +11,7 @@ class Bird extends Phaser.GameObjects.Sprite {
         // move rock down the screen
         this.y -= this.moveSpeed;
 
-        if(this.y <= 400) {
+        if(this.y <= 500) {
             this.alpha -= 0.03;
         }
 
