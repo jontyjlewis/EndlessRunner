@@ -12,11 +12,15 @@ class Lizard extends Phaser.GameObjects.Sprite {
 
     update() {
         // horizontal movement
-        if(Phaser.Input.Keyboard.JustDown(keyA) && this.x > borderUISize + game.config.width/3) {
-            this.x -= game.config.width/4;
+        if(Phaser.Input.Keyboard.JustDown(keyA) && 
+        this.x > borderUISize + game.config.width/3 &&
+        this.isJumping == false) {
+            this.x -= game.config.width/3;
         }
-        else if(Phaser.Input.Keyboard.JustDown(keyD) && this.x < game.config.width - borderUISize - game.config.width/3) {
-            this.x += game.config.width/4;
+        else if(Phaser.Input.Keyboard.JustDown(keyD) && 
+        this.x < game.config.width - borderUISize - game.config.width/3 &&
+        this.isJumping == false) {
+            this.x += game.config.width/3;
         }
 
         if(this.isDash == true) {
