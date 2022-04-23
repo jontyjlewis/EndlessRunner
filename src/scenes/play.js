@@ -5,19 +5,37 @@ class Play extends Phaser.Scene {
     }
 
     preload() {
-        // Player
+        // Player/Lizard
         this.load.image('lizard', './assets/lizard.png');
+        this.load.spritesheet('new_lizard', './assets/new_lizard.png', {
+            frameWidth: 64,
+            frameHeight: 94,
+            startFrame: 0,
+            endFrame: 3
+        });
 
         // Entities
         // branch
         this.load.image('branch', './assets/branch.png');
         // snake
         this.load.image('snake', './assets/snake.png');
+        this.load.spritesheet('slither', './assets/snake_sheet.png', {
+            frameWidth: 420, 
+            frameHeight: 150, 
+            startFrame: 0, 
+            endFrame: 3
+        });
         // birb
         this.load.image('bird', './assets/bird_test.png');
         this.load.image('alert', './assets/alert.png');
         // dwayne johnson
         this.load.image('rock', './assets/rock.png');
+        this.load.spritesheet('new_rock', './assets/rock_mode.png', {
+            frameWidth: 100,
+            frameHeight: 95,
+            startFrame: 0,
+            endFrame: 3
+        });
 
         // Background & border
         this.load.image('background', './assets/Background/background.png');
@@ -43,7 +61,8 @@ class Play extends Phaser.Scene {
         this.add.rectangle(0, 0, game.config.width, borderUISize*2 + borderpadding, 0x0000FF).setOrigin(0 ,0);
 
         // Player
-        this.p1Lizard = new Lizard(this, game.config.width/2, game.config.height - borderUISize - borderpadding*10, 'lizard').setOrigin(0.5, 0);
+        this.p1Lizard = new Lizard(this, game.config.width/2, game.config.height - borderUISize - borderpadding*10, 'new_lizard').setOrigin(0.5, 0);
+        //this.p1Lizard.setScale(0.7);
 
         // Player/Lizard Keybinds
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -63,11 +82,19 @@ class Play extends Phaser.Scene {
 	    // this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0 ,0);
 
         // Snek
-        this.snake1 = new Snake(this, -370, 0, 'snake').setOrigin(0, 0);
+        this.snake1 = new Snake(this, -320, 0, 'slither').setOrigin(0, 0);
+        // snake animation controller?
+        this.anims.create( {
+            key: 'slither',
+            frames: this.anims.generateFrameNumbers('slither', {start: 0, end: 3, first: 0}),
+            frameRate: 20
+        })
+        //let slither = this.add.sprite(this.snake1.x, this.snake1.y, 'slither').setOrigin(0, 0);
+        //slither.anims.play('slither');
 
         // Rock
-        this.rock1 = new Rock(this, game.config.width/6, game.config.height, 'rock').setOrigin(0.5, 0);
-        this.rock2 = new Rock(this, game.config.width * (5/6), game.config.height + 400, 'rock').setOrigin(0.5, 0);
+        this.rock1 = new Rock(this, game.config.width/6, game.config.height, 'new_rock').setOrigin(0.5, 0);
+        this.rock2 = new Rock(this, game.config.width * (5/6), game.config.height + 400, 'new_rock').setOrigin(0.5, 0);
 
         // Bird
         this.bird1 = new Bird(this, game.config.width/2, 0, 'bird').setOrigin(0.5, 0);
@@ -95,7 +122,7 @@ class Play extends Phaser.Scene {
         this.branch2.update();
         this.branch3.update();
         this.snake1.update();
-        this.rock1.update();
+        // this.rock1.update();
         this.rock2.update();
         this.bird1.update();
 
@@ -137,6 +164,7 @@ class Play extends Phaser.Scene {
         // check collision w/ snake
         if (this.checkCollisionSnake(this.p1Lizard, this.snake1)) {
             console.log('hit snake');
+            //this.snakeAttack(this.snake1);
         }
 
         // check collision w/ rock
@@ -180,7 +208,7 @@ class Play extends Phaser.Scene {
 
     checkCollisionRock(lizard, rock) {
         if((lizard.x < rock.x + rock.width &&
-            lizard.x + lizard.width > rock.x &&
+            lizard.x + lizard.width/8 > rock.x &&
             lizard.y < rock.y + rock.height &&
             lizard.y + lizard.height/2 > rock.y) &&
             rock.alpha == 1) {
@@ -202,6 +230,11 @@ class Play extends Phaser.Scene {
         else {
             return false;
         }
+    }
+
+    snakeAttack(snake) {
+        let slither = this.add.sprite(snake.x, snake.y, 'snake_attack').setOrigin(0, 0);
+        slither.anims.play('Sattack');
     }
 }
 function jump() {
