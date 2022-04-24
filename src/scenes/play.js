@@ -6,8 +6,8 @@ class Play extends Phaser.Scene {
 
     preload() {
         // Player/Lizard
-        this.load.image('lizard', './assets/lizard.png');
-        this.load.spritesheet('new_lizard', './assets/new_lizard.png', {
+        //this.load.image('lizard', './assets/lizard.png');
+        this.load.spritesheet('lizard', './assets/new_lizard.png', {
             frameWidth: 64,
             frameHeight: 94,
             startFrame: 0,
@@ -18,7 +18,7 @@ class Play extends Phaser.Scene {
         // branch
         this.load.image('branch', './assets/branch.png');
         // snake
-        this.load.image('snake', './assets/snake.png');
+        // this.load.image('snake', './assets/snake.png');
         this.load.spritesheet('slither', './assets/snake_sheet.png', {
             frameWidth: 420, 
             frameHeight: 150, 
@@ -29,8 +29,8 @@ class Play extends Phaser.Scene {
         this.load.image('bird', './assets/bird_test.png');
         this.load.image('alert', './assets/alert.png');
         // dwayne johnson
-        this.load.image('rock', './assets/rock.png');
-        this.load.spritesheet('new_rock', './assets/rock_mode.png', {
+        // this.load.image('rock', './assets/rock.png');
+        this.load.spritesheet('rock', './assets/rock_mode.png', {
             frameWidth: 100,
             frameHeight: 95,
             startFrame: 0,
@@ -60,8 +60,19 @@ class Play extends Phaser.Scene {
         // top rectangle (score UI)
         this.add.rectangle(0, 0, game.config.width, borderUISize*2 + borderpadding, 0x0000FF).setOrigin(0 ,0);
 
-        // Player
-        this.p1Lizard = new Lizard(this, game.config.width/2, game.config.height - borderUISize - borderpadding*10, 'new_lizard').setOrigin(0.5, 0);
+
+        // -- PLAYER / LIZARD ----
+
+
+        // Player Animation Controller
+        this.anims.create({
+            key: 'walk',
+            frames: this.anims.generateFrameNumbers('lizard', {start: 0, end: 3, first: 0}),
+            frameRate: 6
+        })
+        // Player/Lizard
+        this.p1Lizard = new Lizard(this, game.config.width/2, game.config.height - borderUISize - borderpadding*10, 'lizard').setOrigin(0.5, 0);
+        this.p1Lizard.play({key: 'walk', repeat: -1});
         //this.p1Lizard.setScale(0.7);
 
         // Player/Lizard Keybinds
@@ -70,44 +81,59 @@ class Play extends Phaser.Scene {
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
-        // Entities
-        // branch
+
+        // -- ENEMIES --------------------------------------------------------------------
+
+        // Branch
         this.branch1 = new Branch(this, game.config.width/6, game.config.height - 500, 'branch').setOrigin(0.5, 0);
         this.branch2 = new Branch(this, game.config.width * (5/6), game.config.height - 250, 'branch').setOrigin(0.5, 0);
         this.branch3 = new Branch(this, game.config.width/2, game.config.height, 'branch').setOrigin(0.5, 0);
 
-        // Borders
-        // this.add.rectangle(0, 0, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0,0);
-	    // this.add.rectangle(0, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0 ,0);
-	    // this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0 ,0);
-
-        // Snek
-        this.snake1 = new Snake(this, -320, 0, 'slither').setOrigin(0, 0);
-        // snake animation controller?
-        this.anims.create( {
-            key: 'slither',
-            frames: this.anims.generateFrameNumbers('slither', {start: 0, end: 3, first: 0}),
-            frameRate: 20
-        })
-        //let slither = this.add.sprite(this.snake1.x, this.snake1.y, 'slither').setOrigin(0, 0);
-        //slither.anims.play('slither');
-
-        // Rock
-        this.rock1 = new Rock(this, game.config.width/6, game.config.height, 'new_rock').setOrigin(0.5, 0);
-        this.rock2 = new Rock(this, game.config.width * (5/6), game.config.height + 400, 'new_rock').setOrigin(0.5, 0);
-
         // Bird
         this.bird1 = new Bird(this, game.config.width/2, 0, 'bird').setOrigin(0.5, 0);
-        // this.bird1.setScale(0.1);
         this.alert1 = this.add.sprite(game.config.width/2, game.config.height - borderUISize - borderpadding, 'alert').setOrigin(0.5, 0);
+
+
+        // ---- SNAKE CONTROLLER & CURRENT SPAWN ----
+
+        // snake animation controller
+        this.anims.create( {
+            key: 'slithering',
+            frames: this.anims.generateFrameNumbers('slither', {start: 0, end: 3, first: 0}),
+            frameRate: 4
+        });
+
+        // Snek
+        this.snake1 = new Snake(this, -320, 0, 'slither', 0).setOrigin(0, 0);
+        // animate
+        this.snake1.play({key: 'slithering', repeat: -1});  // Repeat = -1 means loops indefinetely
+
+        // ---- END OF SNAKE ----
+
+
+        // ---- ROCK CONTROLLER & CURRENT SPAWN ----
+
+        // Rock Animation Controller
+        this.anims.create ({
+            key: 'rockFall',
+            frames: this.anims.generateFrameNumbers('rock', {start: 0, end: 3, first: 0}),
+            frameRate: 0.6
+        });
+
+        // Rock
+        this.rock1 = new Rock(this, game.config.width/6, game.config.height, 'rock').setOrigin(0.5, 0);
+        this.rock2 = new Rock(this, game.config.width * (5/6), game.config.height + 400, 'rock').setOrigin(0.5, 0);
+        // animate (TEMP FIX, NEED TO SET ON TRIGGER)
+        this.rock1.play({key: 'rockFall', repeat: -1});
+        this.rock2.play({key: 'rockFall', repeat: -1});
+
+        // ---- END OF ROCK ----
+
 
         // border art
         this.border1 = this.add.tileSprite(0, 0, 420, 600, 'border1').setOrigin(0, 0);
         this.border2 = this.add.tileSprite(0, 0, 420, 600, 'border2').setOrigin(0, 0);
         this.border3 = this.add.tileSprite(0, 0, 420, 600, 'border3').setOrigin(0, 0);
-
-        // warning zone box
-        // this.add.rectangle(0, game.config.height - borderUISize - borderpadding, game.config.width, borderUISize + borderpadding, 0xFF0000).setOrigin(0 ,0);
     }
 
     update() {
@@ -164,7 +190,6 @@ class Play extends Phaser.Scene {
         // check collision w/ snake
         if (this.checkCollisionSnake(this.p1Lizard, this.snake1)) {
             console.log('hit snake');
-            //this.snakeAttack(this.snake1);
         }
 
         // check collision w/ rock
@@ -195,10 +220,11 @@ class Play extends Phaser.Scene {
     }
 
     checkCollisionSnake(lizard, snake) {
-        if(lizard.x < snake.x + snake.width &&
+        if((lizard.x < snake.x + snake.width &&
             lizard.x + lizard.width > snake.x &&
             lizard.y < snake.y + snake.height &&
-            lizard.y + lizard.height/2 > snake.y) {
+            lizard.y + lizard.height/2 > snake.y) &&
+            snake.attack == true) {
                 return true;
         }
         else {
@@ -230,11 +256,6 @@ class Play extends Phaser.Scene {
         else {
             return false;
         }
-    }
-
-    snakeAttack(snake) {
-        let slither = this.add.sprite(snake.x, snake.y, 'snake_attack').setOrigin(0, 0);
-        slither.anims.play('Sattack');
     }
 }
 function jump() {

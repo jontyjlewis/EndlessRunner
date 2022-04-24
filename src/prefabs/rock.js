@@ -12,7 +12,7 @@ class Rock extends Phaser.GameObjects.Sprite {
         this.y += this.moveSpeed;
 
         if(this.y >= -50) {
-            this.alpha += 0.008;
+            this.alpha += 0.01;
         }
 
 
