@@ -57,8 +57,39 @@ class Play extends Phaser.Scene {
         // this.add.rectangle(0, game.config.height/2, game.config.width, 2, 0xFFFFFF).setOrigin(0 ,0);
         // this.add.rectangle(0, game.config.height - game.config.height/4, game.config.width, 2, 0xFFFFFF).setOrigin(0 ,0);
         
-        // top rectangle (score UI)
-        this.add.rectangle(0, 0, game.config.width, borderUISize*2 + borderpadding, 0x0000FF).setOrigin(0 ,0);
+
+        // ---- SCORE ----
+
+        // top rectangle (score UI) (dark green)
+        this.add.rectangle(0, 0, game.config.width, borderUISize*2 + borderpadding, 0x013220).setOrigin(0 ,0);
+
+        // initialize score
+        score = 0;
+
+        // display score counter
+        let scoreConfig = {
+            fontFamily: 'Courier',
+            fontSize: '28px',
+            color: '#FFFFFF',
+            align: 'left',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+            fixedWidth: 100
+        }
+
+        this.add.text(game.config.width/4, borderpadding, 'SCORE: ', scoreConfig);
+        this.scoreCounter = this.add.text(game.config.width/2,  borderpadding, score, scoreConfig);
+        
+        // increment score every second
+        this.increaseScore = this.time.addEvent({
+            delay: 1000,
+            callback: this.scoreUP,
+            callbackScope: this,
+            loop: true
+        });
+        // -- END SCORE ----
 
 
         // -- PLAYER / LIZARD ----
@@ -80,6 +111,8 @@ class Play extends Phaser.Scene {
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+        // -- END OF PLAYER -----
 
 
         // -- ENEMIES --------------------------------------------------------------------
@@ -256,6 +289,12 @@ class Play extends Phaser.Scene {
         else {
             return false;
         }
+    }
+
+    scoreUP() {
+        // console.log("scoreUP");
+        score += 10;
+        this.scoreCounter.text = score;
     }
 }
 function jump() {
