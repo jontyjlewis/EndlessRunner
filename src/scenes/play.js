@@ -94,7 +94,6 @@ class Play extends Phaser.Scene {
 
         // -- PLAYER / LIZARD ----
 
-
         // Player Animation Controller
         this.anims.create({
             key: 'walk',

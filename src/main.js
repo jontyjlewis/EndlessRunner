@@ -17,6 +17,7 @@ let config = {
 let game = new Phaser.Game(config);
 
 let score;
+let highscore;
 
 let borderUISize = config.height / 30;  // should be 20px
 let borderpadding = borderUISize / 2;   // 10px
