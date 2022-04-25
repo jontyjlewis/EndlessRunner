@@ -16,11 +16,20 @@ let config = {
 };
 let game = new Phaser.Game(config);
 
-let score;
-let highscore;
-
 let borderUISize = config.height / 30;  // should be 20px
 let borderpadding = borderUISize / 2;   // 10px
+
+let score;
+let highscore;
+let gameSpeed = 4;
+
+let lane1 = config.width/6;
+let lane2 = config.width/2;
+let lane3 = config.width * (5/6);
+let rowAlert = game.config.height - borderUISize - borderpadding;
+let row0 = game.config.height - borderUISize - borderpadding * 10;
+let row1 = config.height* (7/8);
+let row2 = config.height/2;
 
 // set aside keybinds
 let keyA, keyD, keyW, keySPACE;

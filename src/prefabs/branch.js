@@ -3,7 +3,7 @@ class Branch extends Phaser.GameObjects.Sprite {
         super(scene, x, y, texture, frame);
 
         scene.add.existing(this);   // adds object to the current scene
-        this.moveSpeed = 3;
+        this.moveSpeed = gameSpeed;
     }
 
     update() {

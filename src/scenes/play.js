@@ -6,10 +6,9 @@ class Play extends Phaser.Scene {
 
     preload() {
         // Player/Lizard
-        //this.load.image('lizard', './assets/lizard.png');
         this.load.spritesheet('lizard', './assets/new_lizard.png', {
-            frameWidth: 64,
-            frameHeight: 94,
+            frameWidth: 150,
+            frameHeight: 150,
             startFrame: 0,
             endFrame: 3
         });
@@ -18,18 +17,16 @@ class Play extends Phaser.Scene {
         // branch
         this.load.image('branch', './assets/branch.png');
         // snake
-        // this.load.image('snake', './assets/snake.png');
-        this.load.spritesheet('slither', './assets/snake_sheet.png', {
+        this.load.spritesheet('snake', './assets/snake_sheet.png', {
             frameWidth: 420, 
             frameHeight: 150, 
             startFrame: 0, 
             endFrame: 3
         });
         // birb
-        this.load.image('bird', './assets/bird_test.png');
+        this.load.image('bird', './assets/bird.png');
         this.load.image('alert', './assets/alert.png');
         // dwayne johnson
-        // this.load.image('rock', './assets/rock.png');
         this.load.spritesheet('rock', './assets/rock_mode.png', {
             frameWidth: 100,
             frameHeight: 95,
@@ -57,6 +54,84 @@ class Play extends Phaser.Scene {
         // this.add.rectangle(0, game.config.height/2, game.config.width, 2, 0xFFFFFF).setOrigin(0 ,0);
         // this.add.rectangle(0, game.config.height - game.config.height/4, game.config.width, 2, 0xFFFFFF).setOrigin(0 ,0);
         
+
+        // -- PLAYER / LIZARD ----
+
+        // Player Animation Controller
+        this.anims.create({
+            key: 'walk',
+            frames: this.anims.generateFrameNumbers('lizard', {start: 0, end: 3, first: 0}),
+            frameRate: 6
+        })
+        // Player/Lizard
+        this.p1Lizard = new Lizard(this, lane2, row0, 'lizard').setOrigin(0.5, 0);
+        this.p1Lizard.setScale(0.7);
+        this.p1Lizard.play({key: 'walk', repeat: -1});
+        //this.p1Lizard.setScale(0.7);
+
+        // Player/Lizard Keybinds
+        keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+        keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+        keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+        // -- END OF PLAYER -----
+
+
+        // -- ENEMIES --------------------------------------------------------------------
+
+        // Branch
+        this.branch1 = new Branch(this, lane1, game.config.height - 500, 'branch').setOrigin(0.5, 0);
+        this.branch2 = new Branch(this, lane3, game.config.height - 250, 'branch').setOrigin(0.5, 0);
+        this.branch3 = new Branch(this, lane2, game.config.height, 'branch').setOrigin(0.5, 0);
+
+        // Bird
+        this.bird1 = new Bird(this, lane2, 0, 'bird').setOrigin(0.5, 0);
+        this.bird1.setScale(0.7);
+        this.alert1 = this.add.sprite(lane2, rowAlert, 'alert').setOrigin(0.5, 0);
+
+        this.bird2 = new Bird(this, lane3, 0, 'bird').setOrigin(0.5, 0);
+        this.bird2.setScale(0.7);
+        this.alert2 = this.add.sprite(lane3, rowAlert, 'alert').setOrigin(0.5, 0);
+
+
+        // ---- SNAKE CONTROLLER & CURRENT SPAWN ----
+
+        // snake animation controller
+        this.anims.create( {
+            key: 'slithering',
+            frames: this.anims.generateFrameNumbers('snake', {start: 0, end: 3, first: 0}),
+            frameRate: 4
+        });
+
+        // Snek
+        this.snake1 = new Snake(this, -350, 0, 'snake', 0).setOrigin(0, 0);
+        // animate
+        this.snake1.play({key: 'slithering', repeat: -1});  // Repeat = -1 means loops indefinetely
+
+        // ---- END OF SNAKE ----
+
+
+        // ---- ROCK CONTROLLER & CURRENT SPAWN ----
+
+        // Rock Animation Controller
+        this.anims.create ({
+            key: 'rockFall',
+            frames: this.anims.generateFrameNumbers('rock', {start: 0, end: 3, first: 0}),
+            frameRate: 0.6
+        });
+
+        // Rock
+        this.rock1 = new Rock(this, game.config.width/6, game.config.height, 'rock').setOrigin(0.5, 0);
+        this.rock2 = new Rock(this, game.config.width * (5/6), game.config.height + 400, 'rock').setOrigin(0.5, 0);
+        // animate (TEMP FIX, NEED TO SET ON TRIGGER)
+        this.rock1.play({key: 'rockFall', repeat: -1});
+        this.rock2.play({key: 'rockFall', repeat: -1});
+
+        // ---- END OF ROCK ----
+
+        // ---- END OF ENEMIES ---------------
+
 
         // ---- SCORE ----
 
@@ -92,75 +167,6 @@ class Play extends Phaser.Scene {
         // -- END SCORE ----
 
 
-        // -- PLAYER / LIZARD ----
-
-        // Player Animation Controller
-        this.anims.create({
-            key: 'walk',
-            frames: this.anims.generateFrameNumbers('lizard', {start: 0, end: 3, first: 0}),
-            frameRate: 6
-        })
-        // Player/Lizard
-        this.p1Lizard = new Lizard(this, game.config.width/2, game.config.height - borderUISize - borderpadding*10, 'lizard').setOrigin(0.5, 0);
-        this.p1Lizard.play({key: 'walk', repeat: -1});
-        //this.p1Lizard.setScale(0.7);
-
-        // Player/Lizard Keybinds
-        keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-        keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-        keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-        keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-
-        // -- END OF PLAYER -----
-
-
-        // -- ENEMIES --------------------------------------------------------------------
-
-        // Branch
-        this.branch1 = new Branch(this, game.config.width/6, game.config.height - 500, 'branch').setOrigin(0.5, 0);
-        this.branch2 = new Branch(this, game.config.width * (5/6), game.config.height - 250, 'branch').setOrigin(0.5, 0);
-        this.branch3 = new Branch(this, game.config.width/2, game.config.height, 'branch').setOrigin(0.5, 0);
-
-        // Bird
-        this.bird1 = new Bird(this, game.config.width/2, 0, 'bird').setOrigin(0.5, 0);
-        this.alert1 = this.add.sprite(game.config.width/2, game.config.height - borderUISize - borderpadding, 'alert').setOrigin(0.5, 0);
-
-
-        // ---- SNAKE CONTROLLER & CURRENT SPAWN ----
-
-        // snake animation controller
-        this.anims.create( {
-            key: 'slithering',
-            frames: this.anims.generateFrameNumbers('slither', {start: 0, end: 3, first: 0}),
-            frameRate: 4
-        });
-
-        // Snek
-        this.snake1 = new Snake(this, -320, 0, 'slither', 0).setOrigin(0, 0);
-        // animate
-        this.snake1.play({key: 'slithering', repeat: -1});  // Repeat = -1 means loops indefinetely
-
-        // ---- END OF SNAKE ----
-
-
-        // ---- ROCK CONTROLLER & CURRENT SPAWN ----
-
-        // Rock Animation Controller
-        this.anims.create ({
-            key: 'rockFall',
-            frames: this.anims.generateFrameNumbers('rock', {start: 0, end: 3, first: 0}),
-            frameRate: 0.6
-        });
-
-        // Rock
-        this.rock1 = new Rock(this, game.config.width/6, game.config.height, 'rock').setOrigin(0.5, 0);
-        this.rock2 = new Rock(this, game.config.width * (5/6), game.config.height + 400, 'rock').setOrigin(0.5, 0);
-        // animate (TEMP FIX, NEED TO SET ON TRIGGER)
-        this.rock1.play({key: 'rockFall', repeat: -1});
-        this.rock2.play({key: 'rockFall', repeat: -1});
-
-        // ---- END OF ROCK ----
-
 
         // border art
         this.border1 = this.add.tileSprite(0, 0, 420, 600, 'border1').setOrigin(0, 0);
@@ -170,10 +176,10 @@ class Play extends Phaser.Scene {
 
     update() {
         // background
-        this.background.tilePositionY -= 3;
-        this.border1.tilePositionY -= 3;
-        this.border2.tilePositionY -= 3.3;
-        this.border3.tilePositionY -= 3.5;
+        this.background.tilePositionY -= gameSpeed;
+        this.border1.tilePositionY -= gameSpeed;
+        this.border2.tilePositionY -= gameSpeed + 0.3;
+        this.border3.tilePositionY -= gameSpeed + 0.5;
 
         this.p1Lizard.update();
         this.branch1.update();
@@ -183,6 +189,7 @@ class Play extends Phaser.Scene {
         // this.rock1.update();
         this.rock2.update();
         this.bird1.update();
+        this.bird2.update();
 
         if(this.bird1.alert == true) {
             this.alert1.alpha = 1;
@@ -191,20 +198,25 @@ class Play extends Phaser.Scene {
             this.alert1.alpha = 0;
         }
 
-        // jumping logic
-        if(Phaser.Input.Keyboard.JustDown(keySPACE) && 
-        this.p1Lizard.isJumping == false) {
-            console.log('jumping!');
-            this.p1Lizard.isJumping = true;
-            this.p1Lizard.alpha = 0.5;
-            this.time.delayedCall(1000, jump, null, this);
+        if(this.bird2.alert == true) {
+            this.alert2.alpha = 1;
         }
+        else {
+            this.alert2.alpha = 0;
+        }
+
+        // // jumping logic
+        // if(Phaser.Input.Keyboard.JustDown(keySPACE) && 
+        // this.p1Lizard.isJumping == false) {
+        //     console.log('jumping!');
+        //     this.p1Lizard.isJumping = true;
+        //     this.p1Lizard.alpha = 0.5;
+        //     this.time.delayedCall(1000, jump, null, this);
+        // }
         if(Phaser.Input.Keyboard.JustDown(keyW) && 
-        this.p1Lizard.y == this.p1Lizard.bottomOfScreen &&
-        this.p1Lizard.isJumping == false) {
-            console.log('dash!');
+        this.p1Lizard.y == row0) {
+            //console.log('dash!');
             this.p1Lizard.isDash = true;
-            // this.p1Lizard.y -= 100;
             this.time.delayedCall(700, reset, null, this);
         }
 
@@ -234,16 +246,16 @@ class Play extends Phaser.Scene {
 
         // check collision w/ bird
         if (this.checkCollisionBird(this.p1Lizard, this.bird1)) {
-            console.log('birb got u');
+            console.log('birb got u MID');
+        }
+        if (this.checkCollisionBird(this.p1Lizard, this.bird2)) {
+            console.log('birb got u RIGHT');
         }
     }
 
     checkCollisionBranch(lizard, branch) {
-        if((lizard.x < branch.x + branch.width &&
-            lizard.x + lizard.width > branch.x &&
-            lizard.y < branch.y + branch.height &&
-            lizard.y + lizard.height/2 > branch.y) &&
-            this.p1Lizard.isJumping == false) {
+        if(lizard.x === branch.x &&
+            lizard.y === branch.y) {
                 return true;
         }
         else {
@@ -252,11 +264,7 @@ class Play extends Phaser.Scene {
     }
 
     checkCollisionSnake(lizard, snake) {
-        if((lizard.x < snake.x + snake.width &&
-            lizard.x + lizard.width > snake.x &&
-            lizard.y < snake.y + snake.height &&
-            lizard.y + lizard.height/2 > snake.y) &&
-            snake.attack == true) {
+        if(lizard.y === snake.y && snake.attack) {
                 return true;
         }
         else {
@@ -265,11 +273,8 @@ class Play extends Phaser.Scene {
     }
 
     checkCollisionRock(lizard, rock) {
-        if((lizard.x < rock.x + rock.width &&
-            lizard.x + lizard.width/8 > rock.x &&
-            lizard.y < rock.y + rock.height &&
-            lizard.y + lizard.height/2 > rock.y) &&
-            rock.alpha == 1) {
+        if(lizard.x === rock.x && 
+            lizard.y === rock.y) {
                 return true;
         }
         else {
@@ -278,11 +283,10 @@ class Play extends Phaser.Scene {
     }
 
     checkCollisionBird(lizard, bird) {
-        if((lizard.x < bird.x + bird.width &&
-            lizard.x + lizard.width > bird.x &&
+        if(lizard.x < bird.x + bird.width/3 &&
+            lizard.x + lizard.width/3 > bird.x &&
             lizard.y < bird.y + bird.height &&
-            lizard.y + lizard.height/2 > bird.y) &&
-            bird.alpha == 1) {
+            lizard.y + lizard.height/2 > bird.y) {
                 return true;
         }
         else {
@@ -296,11 +300,11 @@ class Play extends Phaser.Scene {
         this.scoreCounter.text = score;
     }
 }
-function jump() {
-    console.log('not jumping!');
-    this.p1Lizard.isJumping = false;
-    this.p1Lizard.alpha = 1;
-}
+// function jump() {
+//     console.log('not jumping!');
+//     this.p1Lizard.isJumping = false;
+//     this.p1Lizard.alpha = 1;
+// }
 
 function reset() {
     console.log('end dash');

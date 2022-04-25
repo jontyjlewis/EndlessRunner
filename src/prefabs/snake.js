@@ -3,7 +3,7 @@ class Snake extends Phaser.GameObjects.Sprite {
         super(scene, x, y, texture, frame);
 
         scene.add.existing(this);   // adds object to the current scene
-        this.moveSpeed = 3;
+        this.moveSpeed = gameSpeed;
         this.attack = false;
     }
 
@@ -14,7 +14,7 @@ class Snake extends Phaser.GameObjects.Sprite {
         // move snake to top of screen
         if(this.y >= game.config.height) {
             this.y = 0 - game.config.height;
-            this.x = -320;
+            this.x = -350;
             this.attack = false;
         }
 
