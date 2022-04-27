@@ -42,18 +42,8 @@ class Play extends Phaser.Scene {
     }
 
     create() {
-        // background & border
-        this.background = this.add.tileSprite(0, 0, 420, 600, 'background').setOrigin(0, 0);
-
-        // Grid overlay
-        // vertical
-        // this.add.rectangle(game.config.width/3, 0, 2, game.config.height, 0xFFFFFF).setOrigin(0 ,0);
-        // this.add.rectangle(game.config.width - game.config.width/3, 0, 2, game.config.height, 0xFFFFFF).setOrigin(0.5 ,0);
-        // // horizontal
-        // this.add.rectangle(0, game.config.height/4, game.config.width, 2, 0xFFFFFF).setOrigin(0 ,0);
-        // this.add.rectangle(0, game.config.height/2, game.config.width, 2, 0xFFFFFF).setOrigin(0 ,0);
-        // this.add.rectangle(0, game.config.height - game.config.height/4, game.config.width, 2, 0xFFFFFF).setOrigin(0 ,0);
-        
+        // background
+        this.background = this.add.tileSprite(0, 0, 420, 600, 'background').setOrigin(0, 0);        
 
         // -- PLAYER / LIZARD ----
 
@@ -67,13 +57,11 @@ class Play extends Phaser.Scene {
         this.p1Lizard = new Lizard(this, lane2, row0, 'lizard').setOrigin(0.5, 0);
         this.p1Lizard.setScale(0.7);
         this.p1Lizard.play({key: 'walk', repeat: -1});
-        //this.p1Lizard.setScale(0.7);
 
         // Player/Lizard Keybinds
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-        keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
         // -- END OF PLAYER -----
 
@@ -89,15 +77,20 @@ class Play extends Phaser.Scene {
         });
         this.preOption = 2;
 
-        // Branch
+        // -- BRANCHES --
         // container of branches
         this.branches = [];
+
         // initial spawn/test
         this.makeBranch(lane1);
         this.makeBranch(lane3);
 
-        // Bird
+
+        // -- BIRDS -- (working on alert still)
+        // container of birds
         this.birds = [];
+
+        // initial spawn/test birds
         this.makeBird(lane1);
         this.makeBird(lane3);
         this.alert1 = this.add.sprite(lane1, rowAlert, 'alert').setOrigin(0.5, 0);
@@ -115,8 +108,7 @@ class Play extends Phaser.Scene {
         // this.alert2 = this.add.sprite(lane3, rowAlert, 'alert').setOrigin(0.5, 0);
 
 
-        // ---- SNAKE CONTROLLER & CURRENT SPAWN ----
-
+        // -- SNAKE --
         // snake animation controller
         this.anims.create( {
             key: 'slithering',
@@ -124,15 +116,17 @@ class Play extends Phaser.Scene {
             frameRate: 4
         });
 
+        // container
+        this.snakes = [];
+
         // Snek
-        this.snake1 = new Snake(this, -350, 0, 'snake', 0).setOrigin(0, 0);
+        this.makeSnake(lane1);
+        this.makeSnake(lane3);
+
         // animate
-        this.snake1.play({key: 'slithering', repeat: -1});  // Repeat = -1 means loops indefinetely
+        // this.snakes.play({key: 'slithering', repeat: -1});  // Repeat = -1 means loops indefinetely
 
-        // ---- END OF SNAKE ----
-
-
-        // ---- ROCK CONTROLLER & CURRENT SPAWN ----
+        // -- ROCK --
 
         // Rock Animation Controller
         this.anims.create ({
@@ -203,7 +197,7 @@ class Play extends Phaser.Scene {
 
         this.p1Lizard.update();
 
-        this.snake1.update();
+        //this.snake1.update();
         this.rock1.update();
         this.rock2.update();
         // this.bird1.update();
@@ -216,6 +210,7 @@ class Play extends Phaser.Scene {
             }
         }
 
+        // work on alert
         for (let i = 0; i < this.birds.length; i++) {
             this.birds[i].update();
             if(this.birds[i].y > game.config.height) {
@@ -229,6 +224,12 @@ class Play extends Phaser.Scene {
             }
         }
 
+        for (let i = 0; i < this.snakes.length; i++) {
+            this.snakes[i].update();
+            if (this.checkCollisionSnake(this.p1Lizard, this.snakes[i])) {
+                console.log("hit Snek");
+            }
+        }
         // if(this.bird1.alert == true) {
         //     this.alert1.alpha = 1;
         // }
@@ -243,14 +244,7 @@ class Play extends Phaser.Scene {
         //     this.alert2.alpha = 0;
         // }
 
-        // // jumping logic
-        // if(Phaser.Input.Keyboard.JustDown(keySPACE) && 
-        // this.p1Lizard.isJumping == false) {
-        //     console.log('jumping!');
-        //     this.p1Lizard.isJumping = true;
-        //     this.p1Lizard.alpha = 0.5;
-        //     this.time.delayedCall(1000, jump, null, this);
-        // }
+        
         if(Phaser.Input.Keyboard.JustDown(keyW) && 
         this.p1Lizard.y == row0) {
             //console.log('dash!');
@@ -269,10 +263,10 @@ class Play extends Phaser.Scene {
         //     console.log('hit branch MID');
         // }
 
-        // check collision w/ snake
-        if (this.checkCollisionSnake(this.p1Lizard, this.snake1)) {
-            console.log('hit snake');
-        }
+        // // check collision w/ snake
+        // if (this.checkCollisionSnake(this.p1Lizard, this.snake1)) {
+        //     console.log('hit snake');
+        // }
 
         // check collision w/ rock
         if (this.checkCollisionRock(this.p1Lizard, this.rock1)) {
@@ -341,7 +335,7 @@ class Play extends Phaser.Scene {
     spawn() {
         do {
             // option will be either 0, 1, 2, never repeating
-            this.option = Math.floor(Math.random() * 3);
+            this.option = Math.floor(Math.random() * 4);
         } 
         while (this.option == this.preOption);  // will always pick a new pattern
 
@@ -352,12 +346,18 @@ class Play extends Phaser.Scene {
         }
         else if(this.option == 1) {
             this.makeBranch(lane2);
+            this.makeSnake(lane3);
             this.preOption = 1;
         }
         else if(this.option == 2) {
             this.makeBranch(lane3);
             this.makeBird(lane1);
             this.preOption = 2;
+        }
+        else if(this.option == 3) {
+            this.makeBranch(lane2);
+            this.makeSnake(lane1);
+            this.preOption = 3;
         }
     }
 
@@ -368,6 +368,13 @@ class Play extends Phaser.Scene {
     makeBird(lane) {
         this.birds.push(new Bird(this, lane,  game.config.height + 400, 'bird').setOrigin(0.5, 0));
         // this.add.sprite(lane, rowAlert, 'alert').setOrigin(0.5, 0);
+    }
+    makeSnake(lane) {
+        if(lane === lane1) {
+            this.snakes.push(new Snake(this, -350, -100, 'snake').setOrigin(0, 0));
+        } else if(lane === lane3) {
+            this.snakes.push(new Snake(this, game.config.width - 75, -100, 'snake').setOrigin(0, 0));
+        }
     }
 }
 
