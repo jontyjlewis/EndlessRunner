@@ -27,12 +27,12 @@ class Play extends Phaser.Scene {
         this.load.image('bird', './assets/bird.png');
         this.load.image('alert', './assets/alert.png');
         // dwayne johnson
-        this.load.spritesheet('rock', './assets/rock_mode.png', {
-            frameWidth: 100,
-            frameHeight: 95,
-            startFrame: 0,
-            endFrame: 3
-        });
+        // this.load.spritesheet('rock', './assets/rock_mode.png', {
+        //     frameWidth: 100,
+        //     frameHeight: 95,
+        //     startFrame: 0,
+        //     endFrame: 3
+        // });
 
         // Background & border
         this.load.image('background', './assets/Background/background1.png');
@@ -134,19 +134,19 @@ class Play extends Phaser.Scene {
 
         // ---- ROCK CONTROLLER & CURRENT SPAWN ----
 
-        // Rock Animation Controller
-        this.anims.create ({
-            key: 'rockFall',
-            frames: this.anims.generateFrameNumbers('rock', {start: 0, end: 3, first: 0}),
-            frameRate: 0.6
-        });
+        // // Rock Animation Controller
+        // this.anims.create ({
+        //     key: 'rockFall',
+        //     frames: this.anims.generateFrameNumbers('rock', {start: 0, end: 3, first: 0}),
+        //     frameRate: 0.6
+        // });
 
-        // Rock
-        this.rock1 = new Rock(this, game.config.width/6, game.config.height, 'rock').setOrigin(0.5, 0);
-        this.rock2 = new Rock(this, game.config.width * (5/6), game.config.height + 400, 'rock').setOrigin(0.5, 0);
-        // animate (TEMP FIX, NEED TO SET ON TRIGGER)
-        this.rock1.play({key: 'rockFall', repeat: -1});
-        this.rock2.play({key: 'rockFall', repeat: -1});
+        // // Rock
+        // this.rock1 = new Rock(this, game.config.width/6, game.config.height, 'rock').setOrigin(0.5, 0);
+        // this.rock2 = new Rock(this, game.config.width * (5/6), game.config.height + 400, 'rock').setOrigin(0.5, 0);
+        // // animate (TEMP FIX, NEED TO SET ON TRIGGER)
+        // this.rock1.play({key: 'rockFall', repeat: -1});
+        // this.rock2.play({key: 'rockFall', repeat: -1});
 
         // ---- END OF ROCK ----
 
@@ -205,7 +205,7 @@ class Play extends Phaser.Scene {
 
         this.snake1.update();
         // this.rock1.update();
-        this.rock2.update();
+        // this.rock2.update();
         // this.bird1.update();
         // this.bird2.update();
 
@@ -274,13 +274,13 @@ class Play extends Phaser.Scene {
             console.log('hit snake');
         }
 
-        // check collision w/ rock
-        if (this.checkCollisionRock(this.p1Lizard, this.rock1)) {
-            //console.log('hit rock');
-        }
-        if (this.checkCollisionRock(this.p1Lizard, this.rock2)) {
-            //console.log('hit rock');
-        }
+        // // check collision w/ rock
+        // if (this.checkCollisionRock(this.p1Lizard, this.rock1)) {
+        //     //console.log('hit rock');
+        // }
+        // if (this.checkCollisionRock(this.p1Lizard, this.rock2)) {
+        //     //console.log('hit rock');
+        // }
 
         // // check collision w/ bird
         // if (this.checkCollisionBird(this.p1Lizard, this.bird1)) {
@@ -310,15 +310,15 @@ class Play extends Phaser.Scene {
         }
     }
 
-    checkCollisionRock(lizard, rock) {
-        if(lizard.x === rock.x && 
-            lizard.y === rock.y) {
-                return true;
-        }
-        else {
-            return false;
-        }
-    }
+    // checkCollisionRock(lizard, rock) {
+    //     if(lizard.x === rock.x && 
+    //         lizard.y === rock.y) {
+    //             return true;
+    //     }
+    //     else {
+    //         return false;
+    //     }
+    // }
 
     checkCollisionBird(lizard, bird) {
         if(lizard.x < bird.x + bird.width/3 &&
