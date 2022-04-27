@@ -1,4 +1,3 @@
-console.log("hello from play.js");
 class Play extends Phaser.Scene {
     constructor () {
         super("play");
@@ -96,17 +95,7 @@ class Play extends Phaser.Scene {
         this.alert1 = this.add.sprite(lane1, rowAlert, 'alert').setOrigin(0.5, 0);
         this.alert2 = this.add.sprite(lane2, rowAlert, 'alert').setOrigin(0.5, 0);
         this.alert3 = this.add.sprite(lane3, rowAlert, 'alert').setOrigin(0.5, 0);
-        // this.alert1.alpha = 0;
-        // this.alert2.alpha = 0;
-        // this.alert3.alpha = 0;
-        // this.bird1 = new Bird(this, lane2, 0, 'bird').setOrigin(0.5, 0);
-        // this.bird1.setScale(0.7);
-        // this.alert1 = this.add.sprite(lane2, rowAlert, 'alert').setOrigin(0.5, 0);
-
-        // this.bird2 = new Bird(this, lane3, 0, 'bird').setOrigin(0.5, 0);
-        // this.bird2.setScale(0.7);
-        // this.alert2 = this.add.sprite(lane3, rowAlert, 'alert').setOrigin(0.5, 0);
-
+        
 
         // -- SNAKE --
         // snake animation controller
@@ -208,6 +197,7 @@ class Play extends Phaser.Scene {
         }
 
         // -- Collision Checks --
+        // branch
         for (let i = 0; i < this.branches.length; i++) {
             this.branches[i].update();
             if (this.checkCollisionBranch(this.p1Lizard, this.branches[i])) {
@@ -215,7 +205,7 @@ class Play extends Phaser.Scene {
             }
         }
 
-        // work on alert
+        // bird
         for (let i = 0; i < this.birds.length; i++) {
             this.birds[i].update();
             if(this.birds[i].y > game.config.height && 
@@ -240,21 +230,23 @@ class Play extends Phaser.Scene {
                 this.alert3.alpha = 0;
             }
             if (this.checkCollisionBird(this.p1Lizard, this.birds[i])) {
-                console.log("hit Bird");
+                //console.log("hit Bird");
             }
         }
 
+        // snake
         for (let i = 0; i < this.snakes.length; i++) {
             this.snakes[i].update();
             if (this.checkCollisionSnake(this.p1Lizard, this.snakes[i])) {
-                console.log("hit Snek");
+                //console.log("hit Snek");
             }
         }
 
+        // rock
         for (let i = 0; i < this.rocks.length; i++) {
             this.rocks[i].update();
             if (this.checkCollisionRock(this.p1Lizard, this.rocks[i])) {
-                console.log("hit Rock");
+                //console.log("hit Rock");
             }
         }
     }
@@ -266,7 +258,11 @@ class Play extends Phaser.Scene {
             lizard.x + lizard.width/4 > branch.x &&
             lizard.y < branch.y + branch.height &&
             lizard.y + lizard.height/2 > branch.y) {
-                return true;
+                // this.lizard.destroy();
+                this.time.delayedCall(500, () => { 
+                    this.scene.start('gameover'); 
+                });
+                // return true;
         }
         else {
                 return false;
