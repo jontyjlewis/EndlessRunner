@@ -27,7 +27,7 @@ class Play extends Phaser.Scene {
         this.load.image('bird', './assets/bird.png');
         this.load.image('alert', './assets/alert.png');
         // dwayne johnson
-        this.load.spritesheet('rock', './assets/Rock_Mode.png', {
+        this.load.spritesheet('rock', './assets/rock.png', {
             frameWidth: 100,
             frameHeight: 95,
             startFrame: 0,
