@@ -94,8 +94,8 @@ class Play extends Phaser.Scene {
         this.makeBird(lane1);
         this.makeBird(lane3);
         this.alert1 = this.add.sprite(lane1, rowAlert, 'alert').setOrigin(0.5, 0);
-        // this.alert2 = this.add.sprite(lane2, rowAlert, 'alert').setOrigin(0.5, 0);
-        // this.alert3 = this.add.sprite(lane3, rowAlert, 'alert').setOrigin(0.5, 0);
+        this.alert2 = this.add.sprite(lane2, rowAlert, 'alert').setOrigin(0.5, 0);
+        this.alert3 = this.add.sprite(lane3, rowAlert, 'alert').setOrigin(0.5, 0);
         // this.alert1.alpha = 0;
         // this.alert2.alpha = 0;
         // this.alert3.alpha = 0;
@@ -127,7 +127,6 @@ class Play extends Phaser.Scene {
         // this.snakes.play({key: 'slithering', repeat: -1});  // Repeat = -1 means loops indefinetely
 
         // -- ROCK --
-
         // Rock Animation Controller
         this.anims.create ({
             key: 'rockFall',
@@ -135,12 +134,16 @@ class Play extends Phaser.Scene {
             frameRate: 0.6
         });
 
-        // Rock
-        this.rock1 = new Rock(this, game.config.width/6, game.config.height, 'rock').setOrigin(0.5, 0);
-        this.rock2 = new Rock(this, game.config.width * (5/6), game.config.height + 400, 'rock').setOrigin(0.5, 0);
+        // rock container
+        this.rocks = [];
+
+        // Rock spawn
+        this.makeRock(lane2);
+        // this.rock1 = new Rock(this, game.config.width/6, game.config.height, 'rock').setOrigin(0.5, 0);
+        // this.rock2 = new Rock(this, game.config.width * (5/6), game.config.height + 400, 'rock').setOrigin(0.5, 0);
         // animate (TEMP FIX, NEED TO SET ON TRIGGER)
-        this.rock1.play({key: 'rockFall', repeat: -1});
-        this.rock2.play({key: 'rockFall', repeat: -1});
+        // this.rock1.play({key: 'rockFall', repeat: -1});
+        // this.rock2.play({key: 'rockFall', repeat: -1});
 
         // ---- END OF ROCK ----
 
@@ -181,7 +184,6 @@ class Play extends Phaser.Scene {
         // -- END SCORE ----
 
 
-
         // border art
         this.border1 = this.add.tileSprite(0, 0, 420, 600, 'border1').setOrigin(0, 0);
         this.border2 = this.add.tileSprite(0, 0, 420, 600, 'border2').setOrigin(0, 0);
@@ -197,12 +199,15 @@ class Play extends Phaser.Scene {
 
         this.p1Lizard.update();
 
-        //this.snake1.update();
-        this.rock1.update();
-        this.rock2.update();
-        // this.bird1.update();
-        // this.bird2.update();
+        // dash logic
+        if(Phaser.Input.Keyboard.JustDown(keyW) && 
+        this.p1Lizard.y == row0) {
+            //console.log('dash!');
+            this.p1Lizard.isDash = true;
+            this.time.delayedCall(700, reset, null, this);
+        }
 
+        // -- Collision Checks --
         for (let i = 0; i < this.branches.length; i++) {
             this.branches[i].update();
             if (this.checkCollisionBranch(this.p1Lizard, this.branches[i])) {
@@ -213,11 +218,26 @@ class Play extends Phaser.Scene {
         // work on alert
         for (let i = 0; i < this.birds.length; i++) {
             this.birds[i].update();
-            if(this.birds[i].y > game.config.height) {
+            if(this.birds[i].y > game.config.height && 
+                this.birds[i].x === lane1) {
                 this.alert1.alpha = 1;
             }
             else {
                 this.alert1.alpha = 0;
+            }
+            if(this.birds[i].y > game.config.height && 
+                this.birds[i].x === lane2) {
+                this.alert2.alpha = 1;
+            }
+            else {
+                this.alert2.alpha = 0;
+            }
+            if(this.birds[i].y > game.config.height && 
+                this.birds[i].x === lane3) {
+                this.alert3.alpha = 1;
+            }
+            else {
+                this.alert3.alpha = 0;
             }
             if (this.checkCollisionBird(this.p1Lizard, this.birds[i])) {
                 console.log("hit Bird");
@@ -228,6 +248,13 @@ class Play extends Phaser.Scene {
             this.snakes[i].update();
             if (this.checkCollisionSnake(this.p1Lizard, this.snakes[i])) {
                 console.log("hit Snek");
+            }
+        }
+
+        for (let i = 0; i < this.rocks.length; i++) {
+            this.rocks[i].update();
+            if (this.checkCollisionRock(this.p1Lizard, this.rocks[i])) {
+                console.log("hit Rock");
             }
         }
         // if(this.bird1.alert == true) {
@@ -242,46 +269,6 @@ class Play extends Phaser.Scene {
         // }
         // else {
         //     this.alert2.alpha = 0;
-        // }
-
-        
-        if(Phaser.Input.Keyboard.JustDown(keyW) && 
-        this.p1Lizard.y == row0) {
-            //console.log('dash!');
-            this.p1Lizard.isDash = true;
-            this.time.delayedCall(700, reset, null, this);
-        }
-
-        // check collision w/ branch
-        // if (this.checkCollisionBranch(this.p1Lizard, this.branch1)) {
-        //     console.log('hit branch LEFT');
-        // }
-        // if (this.checkCollisionBranch(this.p1Lizard, this.branch2)) {
-        //     console.log('hit branch RIGHT');
-        // }
-        // if (this.checkCollisionBranch(this.p1Lizard, this.branch3)) {
-        //     console.log('hit branch MID');
-        // }
-
-        // // check collision w/ snake
-        // if (this.checkCollisionSnake(this.p1Lizard, this.snake1)) {
-        //     console.log('hit snake');
-        // }
-
-        // check collision w/ rock
-        if (this.checkCollisionRock(this.p1Lizard, this.rock1)) {
-            //console.log('hit rock');
-        }
-        if (this.checkCollisionRock(this.p1Lizard, this.rock2)) {
-            //console.log('hit rock');
-        }
-
-        // // check collision w/ bird
-        // if (this.checkCollisionBird(this.p1Lizard, this.bird1)) {
-        //     //console.log('birb got u MID');
-        // }
-        // if (this.checkCollisionBird(this.p1Lizard, this.bird2)) {
-        //     //console.log('birb got u RIGHT');
         // }
     }
 
@@ -335,7 +322,7 @@ class Play extends Phaser.Scene {
     spawn() {
         do {
             // option will be either 0, 1, 2, never repeating
-            this.option = Math.floor(Math.random() * 4);
+            this.option = Math.floor(Math.random() * 5);
         } 
         while (this.option == this.preOption);  // will always pick a new pattern
 
@@ -359,6 +346,11 @@ class Play extends Phaser.Scene {
             this.makeSnake(lane1);
             this.preOption = 3;
         }
+        else if(this.option == 4) {
+            this.makeBird(lane2);
+            this.makeRock(lane3);
+            this.makeSnake(lane3);
+        }
     }
 
     // ---- ENEMY SPAWNING FUNCTIONS ----
@@ -375,6 +367,9 @@ class Play extends Phaser.Scene {
         } else if(lane === lane3) {
             this.snakes.push(new Snake(this, game.config.width - 75, -100, 'snake').setOrigin(0, 0));
         }
+    }
+    makeRock(lane) {
+        this.rocks.push(new Rock(this, lane, -100, 'rock').setOrigin(0.5, 0));
     }
 }
 

@@ -1,6 +1,6 @@
 // Developers:  Jonathan Lewis
-//              ---
-//              ---
+//              Jacqui
+//              Lucas
 // Date: Started 4/13/2022
 // Project: Endless Runner for CMPM 120 / ARTG 120 @ UCSC Spring 2022
 

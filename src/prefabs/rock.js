@@ -7,7 +7,6 @@ class Rock extends Phaser.GameObjects.Sprite {
     }
 
     update() {
-
         // move rock down the screen
         this.y += this.moveSpeed;
 
@@ -15,11 +14,9 @@ class Rock extends Phaser.GameObjects.Sprite {
             this.alpha += 0.01;
         }
 
-
-        // move rock to top of screen
+        // destroy rock
         if(this.y >= game.config.height) {
-            this.y = 0 - game.config.height;
-            this.alpha = 0;
+            this.destroy();
         }
     }
 }
