@@ -271,7 +271,7 @@ class Play extends Phaser.Scene {
 
         // check collision w/ snake
         if (this.checkCollisionSnake(this.p1Lizard, this.snake1)) {
-            //console.log('hit snake');
+            console.log('hit snake');
         }
 
         // check collision w/ rock
@@ -341,7 +341,7 @@ class Play extends Phaser.Scene {
     spawn() {
         do {
             // option will be either 0, 1, 2, never repeating
-            this.option = Math.floor(Math.random() * 2);
+            this.option = Math.floor(Math.random() * 3);
         } 
         while (this.option == this.preOption);  // will always pick a new pattern
 
@@ -354,7 +354,7 @@ class Play extends Phaser.Scene {
             this.makeBranch(lane2);
             this.preOption = 1;
         }
-        else {
+        else if(this.option == 2) {
             this.makeBranch(lane3);
             this.makeBird(lane1);
             this.preOption = 2;
