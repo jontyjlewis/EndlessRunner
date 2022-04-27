@@ -12,8 +12,8 @@ class Branch extends Phaser.GameObjects.Sprite {
         this.y += this.moveSpeed;
 
         // move branch to top of screen
-        if(this.y >= game.config.height) {
-            this.y = 0 - game.config.height;
+        if(this.y > game.config.height) {
+            this.destroy();
         }
     }
 }

@@ -6,15 +6,16 @@ class Bird extends Phaser.GameObjects.Sprite {
         this.moveSpeed = 9;
         this.birdActive = false;
         this.alert = false;
+        this.setScale(0.7);
     }
 
     update() {
         // move bird up the screen
         this.y -= this.moveSpeed;
 
-        // move bird to bottom of screen
+        // destroy bird off screen
         if(this.y < -400) {
-            this.y = game.config.height + 300;
+            this.destroy();
         }
 
         if(this.x > 0 && this.x < config.height){

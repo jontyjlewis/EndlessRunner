@@ -80,19 +80,39 @@ class Play extends Phaser.Scene {
 
         // -- ENEMIES --------------------------------------------------------------------
 
+        // Enemy Spawn Timer
+        this.spawnTimer = this.time.addEvent({
+            delay: 3000,
+            callback: this.spawn,
+            callbackScope: this,
+            loop: true
+        });
+        this.preOption = 2;
+
         // Branch
-        this.branch1 = new Branch(this, lane1, game.config.height - 500, 'branch').setOrigin(0.5, 0);
-        this.branch2 = new Branch(this, lane3, game.config.height - 250, 'branch').setOrigin(0.5, 0);
-        this.branch3 = new Branch(this, lane2, game.config.height, 'branch').setOrigin(0.5, 0);
+        // container of branches
+        this.branches = [];
+        // initial spawn/test
+        this.makeBranch(lane1);
+        this.makeBranch(lane3);
 
         // Bird
-        this.bird1 = new Bird(this, lane2, 0, 'bird').setOrigin(0.5, 0);
-        this.bird1.setScale(0.7);
-        this.alert1 = this.add.sprite(lane2, rowAlert, 'alert').setOrigin(0.5, 0);
+        this.birds = [];
+        this.makeBird(lane1);
+        this.makeBird(lane3);
+        this.alert1 = this.add.sprite(lane1, rowAlert, 'alert').setOrigin(0.5, 0);
+        // this.alert2 = this.add.sprite(lane2, rowAlert, 'alert').setOrigin(0.5, 0);
+        // this.alert3 = this.add.sprite(lane3, rowAlert, 'alert').setOrigin(0.5, 0);
+        // this.alert1.alpha = 0;
+        // this.alert2.alpha = 0;
+        // this.alert3.alpha = 0;
+        // this.bird1 = new Bird(this, lane2, 0, 'bird').setOrigin(0.5, 0);
+        // this.bird1.setScale(0.7);
+        // this.alert1 = this.add.sprite(lane2, rowAlert, 'alert').setOrigin(0.5, 0);
 
-        this.bird2 = new Bird(this, lane3, 0, 'bird').setOrigin(0.5, 0);
-        this.bird2.setScale(0.7);
-        this.alert2 = this.add.sprite(lane3, rowAlert, 'alert').setOrigin(0.5, 0);
+        // this.bird2 = new Bird(this, lane3, 0, 'bird').setOrigin(0.5, 0);
+        // this.bird2.setScale(0.7);
+        // this.alert2 = this.add.sprite(lane3, rowAlert, 'alert').setOrigin(0.5, 0);
 
 
         // ---- SNAKE CONTROLLER & CURRENT SPAWN ----
@@ -182,28 +202,46 @@ class Play extends Phaser.Scene {
         this.border3.tilePositionY -= gameSpeed + 0.5;
 
         this.p1Lizard.update();
-        this.branch1.update();
-        this.branch2.update();
-        this.branch3.update();
+
         this.snake1.update();
         // this.rock1.update();
         this.rock2.update();
-        this.bird1.update();
-        this.bird2.update();
+        // this.bird1.update();
+        // this.bird2.update();
 
-        if(this.bird1.alert == true) {
-            this.alert1.alpha = 1;
-        }
-        else {
-            this.alert1.alpha = 0;
+        for (let i = 0; i < this.branches.length; i++) {
+            this.branches[i].update();
+            if (this.checkCollisionBranch(this.p1Lizard, this.branches[i])) {
+                console.log("hit Branch");
+            }
         }
 
-        if(this.bird2.alert == true) {
-            this.alert2.alpha = 1;
+        for (let i = 0; i < this.birds.length; i++) {
+            this.birds[i].update();
+            if(this.birds[i].y > game.config.height) {
+                this.alert1.alpha = 1;
+            }
+            else {
+                this.alert1.alpha = 0;
+            }
+            if (this.checkCollisionBird(this.p1Lizard, this.birds[i])) {
+                console.log("hit Bird");
+            }
         }
-        else {
-            this.alert2.alpha = 0;
-        }
+
+        // if(this.bird1.alert == true) {
+        //     this.alert1.alpha = 1;
+        // }
+        // else {
+        //     this.alert1.alpha = 0;
+        // }
+
+        // if(this.bird2.alert == true) {
+        //     this.alert2.alpha = 1;
+        // }
+        // else {
+        //     this.alert2.alpha = 0;
+        // }
 
         // // jumping logic
         // if(Phaser.Input.Keyboard.JustDown(keySPACE) && 
@@ -221,36 +259,36 @@ class Play extends Phaser.Scene {
         }
 
         // check collision w/ branch
-        if (this.checkCollisionBranch(this.p1Lizard, this.branch1)) {
-            console.log('hit branch LEFT');
-        }
-        if (this.checkCollisionBranch(this.p1Lizard, this.branch2)) {
-            console.log('hit branch RIGHT');
-        }
-        if (this.checkCollisionBranch(this.p1Lizard, this.branch3)) {
-            console.log('hit branch MID');
-        }
+        // if (this.checkCollisionBranch(this.p1Lizard, this.branch1)) {
+        //     console.log('hit branch LEFT');
+        // }
+        // if (this.checkCollisionBranch(this.p1Lizard, this.branch2)) {
+        //     console.log('hit branch RIGHT');
+        // }
+        // if (this.checkCollisionBranch(this.p1Lizard, this.branch3)) {
+        //     console.log('hit branch MID');
+        // }
 
         // check collision w/ snake
         if (this.checkCollisionSnake(this.p1Lizard, this.snake1)) {
-            console.log('hit snake');
+            //console.log('hit snake');
         }
 
         // check collision w/ rock
         if (this.checkCollisionRock(this.p1Lizard, this.rock1)) {
-            console.log('hit rock');
+            //console.log('hit rock');
         }
         if (this.checkCollisionRock(this.p1Lizard, this.rock2)) {
-            console.log('hit rock');
+            //console.log('hit rock');
         }
 
-        // check collision w/ bird
-        if (this.checkCollisionBird(this.p1Lizard, this.bird1)) {
-            console.log('birb got u MID');
-        }
-        if (this.checkCollisionBird(this.p1Lizard, this.bird2)) {
-            console.log('birb got u RIGHT');
-        }
+        // // check collision w/ bird
+        // if (this.checkCollisionBird(this.p1Lizard, this.bird1)) {
+        //     //console.log('birb got u MID');
+        // }
+        // if (this.checkCollisionBird(this.p1Lizard, this.bird2)) {
+        //     //console.log('birb got u RIGHT');
+        // }
     }
 
     checkCollisionBranch(lizard, branch) {
@@ -299,12 +337,39 @@ class Play extends Phaser.Scene {
         score += 10;
         this.scoreCounter.text = score;
     }
+
+    spawn() {
+        do {
+            // option will be either 0, 1, 2, never repeating
+            this.option = Math.floor(Math.random() * 2);
+        } 
+        while (this.option == this.preOption);  // will always pick a new pattern
+
+        if(this.option == 0) {
+            this.makeBranch(lane1);
+            this.makeBird(lane3);
+            this.preOption = 0;
+        }
+        else if(this.option == 1) {
+            this.makeBranch(lane2);
+            this.preOption = 1;
+        }
+        else {
+            this.makeBranch(lane3);
+            this.makeBird(lane1);
+            this.preOption = 2;
+        }
+    }
+
+    // ---- ENEMY SPAWNING FUNCTIONS ----
+    makeBranch(lane) {
+        this.branches.push(new Branch(this, lane, -100, 'branch').setOrigin(0.5, 0));
+    }
+    makeBird(lane) {
+        this.birds.push(new Bird(this, lane,  game.config.height + 400, 'bird').setOrigin(0.5, 0));
+        // this.add.sprite(lane, rowAlert, 'alert').setOrigin(0.5, 0);
+    }
 }
-// function jump() {
-//     console.log('not jumping!');
-//     this.p1Lizard.isJumping = false;
-//     this.p1Lizard.alpha = 1;
-// }
 
 function reset() {
     console.log('end dash');
