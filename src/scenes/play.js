@@ -257,24 +257,15 @@ class Play extends Phaser.Scene {
                 console.log("hit Rock");
             }
         }
-        // if(this.bird1.alert == true) {
-        //     this.alert1.alpha = 1;
-        // }
-        // else {
-        //     this.alert1.alpha = 0;
-        // }
-
-        // if(this.bird2.alert == true) {
-        //     this.alert2.alpha = 1;
-        // }
-        // else {
-        //     this.alert2.alpha = 0;
-        // }
     }
 
     checkCollisionBranch(lizard, branch) {
-        if(lizard.x === branch.x &&
-            lizard.y === branch.y) {
+        // if(lizard.x === branch.x &&
+        //     lizard.y === branch.y) {
+        if(lizard.x < branch.x + branch.width/4 &&
+            lizard.x + lizard.width/4 > branch.x &&
+            lizard.y < branch.y + branch.height &&
+            lizard.y + lizard.height/2 > branch.y) {
                 return true;
         }
         else {
@@ -283,7 +274,12 @@ class Play extends Phaser.Scene {
     }
 
     checkCollisionSnake(lizard, snake) {
-        if(lizard.y === snake.y && snake.attack) {
+        // if(lizard.y === snake.y && snake.attack) {
+        if((lizard.x < snake.x + snake.width &&
+            lizard.x + lizard.width > snake.x &&
+            lizard.y < snake.y + snake.height &&
+            lizard.y + lizard.height/2 > snake.y) &&
+            snake.attack == true) {
                 return true;
         }
         else {
@@ -292,8 +288,12 @@ class Play extends Phaser.Scene {
     }
 
     checkCollisionRock(lizard, rock) {
-        if(lizard.x === rock.x && 
-            lizard.y === rock.y) {
+        // if(lizard.x === rock.x && 
+        //     lizard.y === rock.y) {
+        if(lizard.x < rock.x + rock.width/3 &&
+            lizard.x + lizard.width/4 > rock.x &&
+            lizard.y < rock.y + rock.height &&
+            lizard.y + lizard.height/2 > rock.y) {
                 return true;
         }
         else {
@@ -358,7 +358,7 @@ class Play extends Phaser.Scene {
         this.branches.push(new Branch(this, lane, -100, 'branch').setOrigin(0.5, 0));
     }
     makeBird(lane) {
-        this.birds.push(new Bird(this, lane,  game.config.height + 400, 'bird').setOrigin(0.5, 0));
+        this.birds.push(new Bird(this, lane,  game.config.height + 500, 'bird').setOrigin(0.5, 0));
         // this.add.sprite(lane, rowAlert, 'alert').setOrigin(0.5, 0);
     }
     makeSnake(lane) {

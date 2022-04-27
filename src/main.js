@@ -12,6 +12,12 @@ let config = {
     scale: {
         autoCenter: Phaser.Scale.CENTER_BOTH,
         mode: Phaser.Scale.FIT,
+    },
+    physics: {
+        default: 'arcade',
+        arcade: {
+            debug: true
+        }
     }
 };
 let game = new Phaser.Game(config);
