@@ -112,6 +112,10 @@ class Play extends Phaser.Scene {
         this.makeSnake(lane1);
         this.makeSnake(lane3);
 
+        for(let snake of this.snakes) {
+            snake.anims.play({key: 'slithering', repeat: -1});
+        }
+
         // animate
         // this.snakes.play({key: 'slithering', repeat: -1});  // Repeat = -1 means loops indefinetely
 
@@ -366,6 +370,13 @@ class Play extends Phaser.Scene {
             this.makeBird(lane2);
             this.makeRock(lane3);
             this.makeSnake(lane3);
+        }
+
+        // play animations
+        for(let snake of this.snakes) {
+        if(snake.anims) {
+            snake.anims.play({key: 'slithering', repeat: -1});
+            }
         }
     }
 
