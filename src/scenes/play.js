@@ -4,40 +4,6 @@ class Play extends Phaser.Scene {
     }
 
     preload() {
-        // Player/Lizard
-        this.load.spritesheet('lizard', './assets/new_lizard.png', {
-            frameWidth: 150,
-            frameHeight: 150,
-            startFrame: 0,
-            endFrame: 3
-        });
-
-        // Entities
-        // branch
-        this.load.image('branch', './assets/branch1.png');
-        // snake
-        this.load.spritesheet('snake', './assets/snake_sheet.png', {
-            frameWidth: 420, 
-            frameHeight: 150, 
-            startFrame: 0, 
-            endFrame: 3
-        });
-        // birb
-        this.load.image('bird', './assets/bird.png');
-        this.load.image('alert', './assets/alert.png');
-        // dwayne johnson
-        this.load.spritesheet('rock', './assets/rock.png', {
-            frameWidth: 100,
-            frameHeight: 95,
-            startFrame: 0,
-            endFrame: 3
-        });
-
-        // Background & border
-        this.load.image('background', './assets/Background/background2.png');
-        this.load.image('border1', './assets/Background/border1.png');
-        this.load.image('border2', './assets/Background/border2.png');
-        this.load.image('border3', './assets/Background/border3.png');
     }
 
     create() {
@@ -115,9 +81,6 @@ class Play extends Phaser.Scene {
         for(let snake of this.snakes) {
             snake.anims.play({key: 'slithering', repeat: -1});
         }
-
-        // animate
-        // this.snakes.play({key: 'slithering', repeat: -1});  // Repeat = -1 means loops indefinetely
 
         // -- ROCK --
         // Rock Animation Controller
@@ -374,8 +337,8 @@ class Play extends Phaser.Scene {
 
         // play animations
         for(let snake of this.snakes) {
-        if(snake.anims) {
-            snake.anims.play({key: 'slithering', repeat: -1});
+            if(snake.anims) {
+                snake.anims.play({key: 'slithering', repeat: -1});
             }
         }
     }
@@ -386,7 +349,6 @@ class Play extends Phaser.Scene {
     }
     makeBird(lane) {
         this.birds.push(new Bird(this, lane,  game.config.height + 500, 'bird').setOrigin(0.5, 0));
-        // this.add.sprite(lane, rowAlert, 'alert').setOrigin(0.5, 0);
     }
     makeSnake(lane) {
         if(lane === lane1) {
