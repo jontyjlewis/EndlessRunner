@@ -1,8 +1,9 @@
-class Bird extends Phaser.GameObjects.Sprite {
+class Bird extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, texture, frame) {
         super(scene, x, y, texture, frame);
 
         scene.add.existing(this);   // adds object to the current scene
+        scene.physics.add.existing(this);   // adds physics
         this.moveSpeed = 9;
         this.birdActive = false;
         this.alert = false;

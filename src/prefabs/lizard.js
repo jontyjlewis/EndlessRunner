@@ -4,6 +4,7 @@ class Lizard extends Phaser.Physics.Arcade.Sprite {
         super(scene, x, y, texture, frame);
 
         scene.add.existing(this);   // add object to the existing scene
+        scene.physics.add.existing(this);   // adds physics
         this.isJumping = false;          // jumping logic
         this.isDash = false;
         this.moveSpeed = gameSpeed;

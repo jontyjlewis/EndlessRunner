@@ -8,17 +8,17 @@ let config = {
     type: Phaser.CANVAS,
     width: 420,
     height: 600,
-    scene: [Preload, Menu, Play, Gameover],
-    scale: {
-        autoCenter: Phaser.Scale.CENTER_BOTH,
-        mode: Phaser.Scale.FIT,
-    },
     physics: {
         default: 'arcade',
         arcade: {
             debug: true
         }
-    }
+    },
+    scene: [Preload, Menu, Play, Gameover],
+    scale: {
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+        mode: Phaser.Scale.FIT,
+    },
 };
 let game = new Phaser.Game(config);
 
