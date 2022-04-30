@@ -244,35 +244,41 @@ class Play extends Phaser.Scene {
     spawn() {
         do {
             // option will be either 0, 1, 2, never repeating
-            this.option = Math.floor(Math.random() * 5);
+            this.option = Math.floor(Math.random() * 6);
         }
         while (this.option == this.preOption);  // will always pick a new pattern
 
         if (this.option == 0) {
             this.makeBranch(lane1);
-            this.makeBird(lane3);
+            this.makeBranch(lane3);
             this.preOption = 0;
         }
         else if (this.option == 1) {
             this.makeBranch(lane2);
-            this.makeSnake(lane3);
+            this.makeBranch(lane1);
             this.preOption = 1;
         }
         else if (this.option == 2) {
-            this.makeBranch(lane3);
-            this.makeBird(lane1);
+            this.makeBird(lane3);
+            this.makeSnake(lane1);
             this.preOption = 2;
         }
         else if (this.option == 3) {
             this.makeBranch(lane2);
+            this.makeBranch(lane3);
             this.makeSnake(lane1);
-            this.makeRock(lane3);
             this.preOption = 3;
         }
         else if (this.option == 4) {
-            this.makeBird(lane2);
-            this.makeRock(lane3);
+            this.makeBranch(lane1);
+            this.makeBranch(lane2);
             this.makeSnake(lane3);
+            this.preOption = 4;
+        }
+        else if(this.option == 5) {
+            this.makeBird(lane1);
+            this.makeBranch(lane2);
+            this.preOption = 5;
         }
 
         // play animations
