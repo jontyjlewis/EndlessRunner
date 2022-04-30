@@ -131,6 +131,15 @@ class Play extends Phaser.Scene {
         this.border3 = this.add.tileSprite(0, 0, 420, 600, 'border3').setOrigin(0, 0);
 
         this.gameoverFlag = false
+
+        // difficulty ramp (speed up)
+        this.increaseSpeed = this.time.addEvent({
+            delay: 15000,
+            callback: this.speedUP,
+            callbackScope: this,
+            loop: true
+        });
+
     }
 
     update() {
@@ -226,6 +235,10 @@ class Play extends Phaser.Scene {
         // console.log("scoreUP");
         score += 10;
         this.scoreCounter.text = score;
+    }
+
+    speedUP() {
+        gameSpeed += 0.5;
     }
 
     spawn() {

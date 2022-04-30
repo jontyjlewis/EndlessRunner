@@ -13,6 +13,7 @@ class Snake extends Phaser.Physics.Arcade.Sprite {
     }
 
     update() {
+        this.moveSpeed = gameSpeed;
         // move snake down the screen
         this.y += this.moveSpeed;
 

@@ -27,7 +27,7 @@ let borderpadding = borderUISize / 2;   // 10px
 
 let score;
 let highscore;
-let gameSpeed = 4;
+let gameSpeed = 3;
 
 let lane1 = config.width/6;
 let lane2 = config.width/2;

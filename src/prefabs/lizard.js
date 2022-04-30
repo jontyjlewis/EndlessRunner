@@ -7,7 +7,7 @@ class Lizard extends Phaser.Physics.Arcade.Sprite {
         scene.physics.add.existing(this);   // adds physics
         this.isJumping = false;          // jumping logic
         this.isDash = false;
-        this.moveSpeed = gameSpeed;
+        this.moveSpeed = 4;
         this.bottomOfScreen = game.config.height - borderUISize - borderpadding * 10;
         this.sfxMove = scene.sound.add('sfx_dash');
     }

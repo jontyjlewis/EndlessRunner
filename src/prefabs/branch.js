@@ -9,7 +9,7 @@ class Branch extends Phaser.Physics.Arcade.Sprite {
     }
 
     update() {
-
+        this.moveSpeed = gameSpeed;
         // move branch down the screen
         this.y += this.moveSpeed;
 
