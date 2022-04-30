@@ -1,4 +1,4 @@
-class Snake extends Phaser.GameObjects.Sprite {
+class Snake extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, texture, frame) {
         super(scene, x, y, texture, frame);
 
@@ -6,18 +6,14 @@ class Snake extends Phaser.GameObjects.Sprite {
         this.moveSpeed = gameSpeed;
         this.attack = false;
         this.flipped = false;
+        this.sfxPlay = false;
+        this.sfxAttack = scene.sound.add('sfx_snake');
     }
 
     update() {
         // move snake down the screen
         this.y += this.moveSpeed;
 
-        // // move snake to top of screen
-        // if(this.y >= game.config.height) {
-        //     this.y = 0 - game.config.height;
-        //     this.x = -350;
-        //     this.attack = false;
-        // }
         if(this.x > game.config.width/2 && this.attack == false) {
             this.flipX = true;
         }
@@ -27,6 +23,10 @@ class Snake extends Phaser.GameObjects.Sprite {
             if(this.y >= game.config.height -125) {
                 this.attack = true;
                 this.x = 0;
+                if(this.sfxPlay == false) {
+                    this.sfxPlay = true;
+                    this.sfxAttack.play();
+                }
             }
         } else if(this.flipped == true) {
             this.flipX = true;
@@ -34,9 +34,12 @@ class Snake extends Phaser.GameObjects.Sprite {
             if(this.y >= game.config.height -125) {
                 this.attack = true;
                 this.x = -600;
+                if(this.sfxPlay == false) {
+                    this.sfxPlay = true;
+                    this.sfxAttack.play();
+                }
             }
         }
-        
 
         // destroy snake
         if(this.y > game.config.height + 100) {

@@ -8,7 +8,7 @@ let config = {
     type: Phaser.CANVAS,
     width: 420,
     height: 600,
-    scene: [Menu, Play, Gameover],
+    scene: [Preload, Menu, Play, Gameover],
     scale: {
         autoCenter: Phaser.Scale.CENTER_BOTH,
         mode: Phaser.Scale.FIT,
