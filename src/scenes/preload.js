@@ -7,6 +7,7 @@ class Preload extends Phaser.Scene {
         // Sounds
         this.load.audio('sfx_dash', './assets/Sounds/liz_jump.wav');
         this.load.audio('sfx_snake', './assets/Sounds/mob_snake.wav');
+        this.load.audio('sfx_bird', './assets/Sounds/mob_bird.wav');
 
         // Player/Lizard
         this.load.spritesheet('lizard', './assets/new_lizard.png', {
@@ -16,7 +17,7 @@ class Preload extends Phaser.Scene {
             endFrame: 3
         });
 
-        // Entities
+        // Entities1
         // branch
         this.load.image('branch', './assets/branch1.png');
         // snake

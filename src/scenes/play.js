@@ -57,10 +57,18 @@ class Play extends Phaser.Scene {
 
         // initial spawn/test birds
         this.makeBird(lane1);
-        this.makeBird(lane3);
+        //this.makeBird(lane3);
         this.alert1 = this.add.sprite(lane1, rowAlert, 'alert').setOrigin(0.5, 0);
         this.alert2 = this.add.sprite(lane2, rowAlert, 'alert').setOrigin(0.5, 0);
         this.alert3 = this.add.sprite(lane3, rowAlert, 'alert').setOrigin(0.5, 0);
+
+        // make alert flash
+        this.alertFlash = this.time.addEvent({
+            delay: 100,
+            callback: this.flash,
+            callbackScope: this,
+            loop: true
+        });
         
 
         // -- SNAKE --
@@ -178,23 +186,62 @@ class Play extends Phaser.Scene {
                 this.birds[i].update();
                 if(this.birds[i].y > game.config.height && 
                     this.birds[i].x === lane1) {
+                    this.birds[i].alert = true;
                     this.alert1.alpha = 1;
+
+                    // if(this.alert1.alpha == 1) {
+                    //     this.time.delayedCall(100, () => { 
+                    //         this.alert1.alpha = 0; 
+                    //     });
+                    // }
+                    // if(this.alert1.alpha == 0) {
+                    //     this.time.delayedCall(100, () => { 
+                    //         this.alert1.alpha = 1; 
+                    //     });
+                    // }
                 }
                 else {
+                    this.birds[i].alert = false;
                     this.alert1.alpha = 0;
                 }
                 if(this.birds[i].y > game.config.height && 
                     this.birds[i].x === lane2) {
+                    this.birds[i].alert = true;
                     this.alert2.alpha = 1;
+
+                    // if(this.alert2.alpha == 1) {
+                    //     this.time.delayedCall(100, () => { 
+                    //         this.alert2.alpha = 0; 
+                    //     });
+                    // }
+                    // if(this.alert2.alpha == 0) {
+                    //     this.time.delayedCall(100, () => { 
+                    //         this.alert2.alpha = 1; 
+                    //     });
+                    // }
                 }
                 else {
+                    this.birds[i].alert = false;
                     this.alert2.alpha = 0;
                 }
                 if(this.birds[i].y > game.config.height && 
                     this.birds[i].x === lane3) {
+                    this.birds[i].alert = true;
                     this.alert3.alpha = 1;
+
+                    // if(this.alert3.alpha == 1) {
+                    //     this.time.delayedCall(100, () => { 
+                    //         this.alert3.alpha = 0; 
+                    //     });
+                    // }
+                    // if(this.alert3.alpha == 0) {
+                    //     this.time.delayedCall(100, () => { 
+                    //         this.alert3.alpha = 1; 
+                    //     });
+                    // }
                 }
                 else {
+                    this.birds[i].alert = false;
                     this.alert3.alpha = 0;
                 }
                 if (this.checkCollisionBird(this.p1Lizard, this.birds[i])) {
@@ -363,7 +410,5 @@ class Play extends Phaser.Scene {
 }
 
 function reset() {
-    // console.log('end dash');
     this.p1Lizard.isDash = false;
-    //this.p1Lizard.y = game.config.height - borderUISize - borderpadding * 10;
 }

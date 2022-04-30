@@ -7,6 +7,8 @@ class Bird extends Phaser.GameObjects.Sprite {
         this.birdActive = false;
         this.alert = false;
         this.setScale(0.7);
+        this.sfxPlay = false;
+        this.sfxAttack = scene.sound.add('sfx_bird');
     }
 
     update() {
@@ -25,15 +27,15 @@ class Bird extends Phaser.GameObjects.Sprite {
         } 
 
         if(this.y > game.config.height) {
-            this.warning();
+            this.alert = true;
         }
         else {
             this.alert = false;
         }
-    }
 
-    warning() {
-        // console.log("bird incoming");
-        this.alert = true;
+        if(this.birdActive && !this.sfxPlay) {
+            this.sfxPlay = true;
+            this.sfxAttack.play();
+        }
     }
 }
