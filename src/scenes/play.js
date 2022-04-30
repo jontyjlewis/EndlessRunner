@@ -101,7 +101,7 @@ class Play extends Phaser.Scene {
 
         // display score counter
         let scoreConfig = {
-            fontFamily: 'Courier',
+            fontFamily: 'Impact',
             fontSize: '28px',
             color: '#FFFFFF',
             align: 'left',
@@ -275,7 +275,7 @@ class Play extends Phaser.Scene {
         this.branches.push(new Branch(this, lane, -100, 'branch').setOrigin(0.5, 0));
     }
     makeBird(lane) {
-        this.birds.push(new Bird(this, lane, game.config.height + 500, 'bird').setOrigin(0.5, 0));
+        this.birds.push(new Bird(this, lane, game.config.height + 600, 'bird').setOrigin(0.5, 0));
     }
     makeSnake(lane) {
         if (lane === lane1) {
