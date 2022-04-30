@@ -3,9 +3,6 @@ class Play extends Phaser.Scene {
         super("play");
     }
 
-    preload() {
-    }
-
     create() {
         // background
         this.background = this.add.tileSprite(0, 0, 420, 600, 'background').setOrigin(0, 0);        
@@ -22,6 +19,7 @@ class Play extends Phaser.Scene {
         this.p1Lizard = new Lizard(this, lane2, row0, 'lizard').setOrigin(0.5, 0);
         this.p1Lizard.setScale(0.7);
         this.p1Lizard.play({key: 'walk', repeat: -1});
+        this.p1Lizard.body.setSize(90,90);
 
         // Player/Lizard Keybinds
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -33,7 +31,7 @@ class Play extends Phaser.Scene {
 
         // -- ENEMIES --------------------------------------------------------------------
 
-        // Enemy Spawn Timer
+        // Enemy Spawn Timer (every 3 seconds)
         this.spawnTimer = this.time.addEvent({
             delay: 3000,
             callback: this.spawn,
@@ -176,8 +174,12 @@ class Play extends Phaser.Scene {
             // branch
             for (let i = 0; i < this.branches.length; i++) {
                 this.branches[i].update();
-                if (this.checkCollisionBranch(this.p1Lizard, this.branches[i])) {
+                // if (this.checkCollisionBranch(this.p1Lizard, this.branches[i])) {
+                //     console.log("hit Branch");
+                // }
+                if(this.physics.collide(this.p1Lizard, this.branches[i])) {
                     console.log("hit Branch");
+                    this.gameoverFlag = true;
                 }
             }
 
@@ -244,24 +246,36 @@ class Play extends Phaser.Scene {
                     this.birds[i].alert = false;
                     this.alert3.alpha = 0;
                 }
-                if (this.checkCollisionBird(this.p1Lizard, this.birds[i])) {
+                // if (this.checkCollisionBird(this.p1Lizard, this.birds[i])) {
+                //     console.log("hit Bird");
+                // }
+                if(this.physics.collide(this.p1Lizard, this.birds[i])) {
                     console.log("hit Bird");
+                    this.gameoverFlag = true;
                 }
             }
 
             // snake
             for (let i = 0; i < this.snakes.length; i++) {
                 this.snakes[i].update();
-                if (this.checkCollisionSnake(this.p1Lizard, this.snakes[i])) {
-                    console.log("hit Snek");
+                // if (this.checkCollisionSnake(this.p1Lizard, this.snakes[i])) {
+                //     console.log("hit Snek");
+                // }
+                if(this.physics.collide(this.p1Lizard, this.snakes[i]) && this.snakes[i].attack == true) {
+                    console.log("hit Snake");
+                    this.gameoverFlag = true;
                 }
             }
 
             // rock
             for (let i = 0; i < this.rocks.length; i++) {
                 this.rocks[i].update();
-                if (this.checkCollisionRock(this.p1Lizard, this.rocks[i])) {
+                // if (this.checkCollisionRock(this.p1Lizard, this.rocks[i])) {
+                //     console.log("hit Rock");
+                // }
+                if(this.physics.collide(this.p1Lizard, this.rocks[i])) {
                     console.log("hit Rock");
+                    this.gameoverFlag = true;
                 }
             }
         }
@@ -272,75 +286,75 @@ class Play extends Phaser.Scene {
         }
     }
 
-    checkCollisionBranch(lizard, branch) {
-        // if(lizard.x === branch.x &&
-        //     lizard.y === branch.y) {
-        if(lizard.x < branch.x + branch.width/4 &&
-            lizard.x + lizard.width/4 > branch.x &&
-            lizard.y < branch.y + branch.height &&
-            lizard.y + lizard.height/2 > branch.y) {
-                //console.log('gameover');
-                // this.time.delayedCall(500, () => { 
-                //     this.scene.start('gameover'); 
-                // });
-                this.gameoverFlag = true;
-        }
-        else {
-                return false;
-        }
-    }
+    // checkCollisionBranch(lizard, branch) {
+    //     // if(lizard.x === branch.x &&
+    //     //     lizard.y === branch.y) {
+    //     if(lizard.x < branch.x + branch.width/4 &&
+    //         lizard.x + lizard.width/4 > branch.x &&
+    //         lizard.y < branch.y + branch.height &&
+    //         lizard.y + lizard.height/2 > branch.y) {
+    //             //console.log('gameover');
+    //             // this.time.delayedCall(500, () => { 
+    //             //     this.scene.start('gameover'); 
+    //             // });
+    //             this.gameoverFlag = true;
+    //     }
+    //     else {
+    //             return false;
+    //     }
+    // }
 
-    checkCollisionSnake(lizard, snake) {
-        // if(lizard.y === snake.y && snake.attack) {
-        if((lizard.x < snake.x + snake.width &&
-            lizard.x + lizard.width > snake.x &&
-            lizard.y < snake.y + snake.height &&
-            lizard.y + lizard.height/2 > snake.y) &&
-            snake.attack == true) {
-                //console.log('gameover');
-                // this.time.delayedCall(500, () => { 
-                //     this.scene.start('gameover'); 
-                // });
-                this.gameoverFlag = true;
-        }
-        else {
-            return false;
-        }
-    }
+    // checkCollisionSnake(lizard, snake) {
+    //     // if(lizard.y === snake.y && snake.attack) {
+    //     if((lizard.x < snake.x + snake.width &&
+    //         lizard.x + lizard.width > snake.x &&
+    //         lizard.y < snake.y + snake.height &&
+    //         lizard.y + lizard.height/2 > snake.y) &&
+    //         snake.attack == true) {
+    //             //console.log('gameover');
+    //             // this.time.delayedCall(500, () => { 
+    //             //     this.scene.start('gameover'); 
+    //             // });
+    //             this.gameoverFlag = true;
+    //     }
+    //     else {
+    //         return false;
+    //     }
+    // }
 
-    checkCollisionRock(lizard, rock) {
-        // if(lizard.x === rock.x && 
-        //     lizard.y === rock.y) {
-        if(lizard.x < rock.x + rock.width/3 &&
-            lizard.x + lizard.width/4 > rock.x &&
-            lizard.y < rock.y + rock.height &&
-            lizard.y + lizard.height/2 > rock.y) {
-                //console.log('gameover');
-                // this.time.delayedCall(500, () => { 
-                //     this.scene.start('gameover'); 
-                // });
-                this.gameoverFlag = true;
-        }
-        else {
-            return false;
-        }
-    }
+    // checkCollisionRock(lizard, rock) {
+    //     // if(lizard.x === rock.x && 
+    //     //     lizard.y === rock.y) {
+    //     if(lizard.x < rock.x + rock.width/3 &&
+    //         lizard.x + lizard.width/4 > rock.x &&
+    //         lizard.y < rock.y + rock.height &&
+    //         lizard.y + lizard.height/2 > rock.y) {
+    //             //console.log('gameover');
+    //             // this.time.delayedCall(500, () => { 
+    //             //     this.scene.start('gameover'); 
+    //             // });
+    //             this.gameoverFlag = true;
+    //     }
+    //     else {
+    //         return false;
+    //     }
+    // }
 
-    checkCollisionBird(lizard, bird) {
-        if(lizard.x < bird.x + bird.width/3 &&
-            lizard.x + lizard.width/3 > bird.x &&
-            lizard.y < bird.y + bird.height &&
-            lizard.y + lizard.height/2 > bird.y) {
-                //console.log('gameover');
-                // this.time.delayedCall(500, () => { 
-                //     this.scene.start('gameover'); 
-                // });
-                this.gameoverFlag = true;
-        }
-        else {
-            return false;
-        }
-    }
+    // checkCollisionBird(lizard, bird) {
+    //     if(lizard.x < bird.x + bird.width/3 &&
+    //         lizard.x + lizard.width/3 > bird.x &&
+    //         lizard.y < bird.y + bird.height &&
+    //         lizard.y + lizard.height/2 > bird.y) {
+    //             //console.log('gameover');
+    //             // this.time.delayedCall(500, () => { 
+    //             //     this.scene.start('gameover'); 
+    //             // });
+    //             this.gameoverFlag = true;
+    //     }
+    //     else {
+    //         return false;
+    //     }
+    // }
 
     scoreUP() {
         // console.log("scoreUP");

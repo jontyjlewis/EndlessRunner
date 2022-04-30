@@ -4,6 +4,7 @@ class Snake extends Phaser.Physics.Arcade.Sprite {
 
         scene.add.existing(this);   // adds object to the current scene
         scene.physics.add.existing(this);   // adds physics
+        this.body.setSize(420,90);
         this.moveSpeed = gameSpeed;
         this.attack = false;
         this.flipped = false;

@@ -4,6 +4,7 @@ class Branch extends Phaser.Physics.Arcade.Sprite {
 
         scene.add.existing(this);   // adds object to the current scene
         scene.physics.add.existing(this);   // add physics
+        this.body.setSize(140,60);
         this.moveSpeed = gameSpeed;
     }
 
