@@ -9,7 +9,7 @@ class Preload extends Phaser.Scene {
         this.load.audio('sfx_snake', './assets/Sounds/mob_snake.wav');
         this.load.audio('sfx_bird', './assets/Sounds/mob_bird.wav');
         this.load.audio('sfx_menu', '/assets/Sounds/menu.wav');
-        this.load.audio('sfx_bg', './assets/Sounds/bg_track1.wav');
+        this.load.audio('sfx_bg', './assets/Sounds/bg_track.wav');
 
         // Player/Lizard
         this.load.spritesheet('lizard', './assets/new_lizard.png', {
