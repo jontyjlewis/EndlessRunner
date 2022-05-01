@@ -14,7 +14,7 @@ class Play extends Phaser.Scene {
         this.time.delayedCall(1450, () => {
             this.tweens.add({
                 targets: this.bgm,
-                volume: 1,
+                volume: 0.8,
                 ease: 'Linear',
                 duration: 1000,
             });
