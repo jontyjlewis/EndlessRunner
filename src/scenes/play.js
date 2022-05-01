@@ -6,12 +6,18 @@ class Play extends Phaser.Scene {
     create() {
         this.bgm = this.sound.add('sfx_bg', {
             mute: false,
-            volume: 1,
+            volume: 0,
             rate: 1,
             loop: true
         });
 
-        this.time.delayedCall(1850, () => {
+        this.time.delayedCall(1450, () => {
+            this.tweens.add({
+                targets: this.bgm,
+                volume: 1,
+                ease: 'Linear',
+                duration: 1000,
+            });
             this.bgm.play();
         });
         //this.bgm.play();
