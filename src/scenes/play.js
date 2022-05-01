@@ -4,6 +4,17 @@ class Play extends Phaser.Scene {
     }
 
     create() {
+        this.bgm = this.sound.add('sfx_bg', {
+            mute: false,
+            volume: 1,
+            rate: 1,
+            loop: true
+        });
+
+        this.time.delayedCall(1850, () => {
+            this.bgm.play();
+        });
+        //this.bgm.play();
         // background
         this.background = this.add.tileSprite(0, 0, 420, 600, 'background').setOrigin(0, 0);
 
@@ -19,7 +30,7 @@ class Play extends Phaser.Scene {
         this.p1Lizard = new Lizard(this, lane2, row0, 'lizard').setOrigin(0.5, 0);
         this.p1Lizard.setScale(0.7);
         this.p1Lizard.play({ key: 'walk', repeat: -1 });
-        this.p1Lizard.body.setSize(90, 90);
+        this.p1Lizard.body.setSize(90, 70);
 
         // Player/Lizard Keybinds
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -157,7 +168,7 @@ class Play extends Phaser.Scene {
                 this.p1Lizard.y == row0) {
                 //console.log('dash!');
                 this.p1Lizard.isDash = true;
-                this.time.delayedCall(700, reset, null, this);
+                this.time.delayedCall(600, reset, null, this);
             }
 
             // -- Collision Checks --
@@ -167,6 +178,7 @@ class Play extends Phaser.Scene {
                 if (this.physics.collide(this.p1Lizard, this.branches[i])) {
                     console.log("hit Branch");
                     this.gameoverFlag = true;
+                    this.gameOver();
                 }
             }
 
@@ -203,6 +215,7 @@ class Play extends Phaser.Scene {
                 if (this.physics.collide(this.p1Lizard, this.birds[i])) {
                     console.log("hit Bird");
                     this.gameoverFlag = true;
+                    this.gameOver();
                 }
             }
 
@@ -212,6 +225,7 @@ class Play extends Phaser.Scene {
                 if (this.physics.collide(this.p1Lizard, this.snakes[i]) && this.snakes[i].attack == true) {
                     console.log("hit Snake");
                     this.gameoverFlag = true;
+                    this.gameOver();
                 }
             }
 
@@ -221,14 +235,25 @@ class Play extends Phaser.Scene {
                 if (this.physics.collide(this.p1Lizard, this.rocks[i])) {
                     console.log("hit Rock");
                     this.gameoverFlag = true;
+                    this.gameOver();
                 }
             }
         }
-        else {
-            this.time.delayedCall(1000, () => {
-                this.scene.start('gameover');
-            });
-        }
+    }
+
+    // when you lose
+    gameOver() {
+        endScore = score;
+        this.p1Lizard.anims.stop(null, true);
+        this.tweens.add({
+            targets: this.bgm,
+            volume: 0,
+            ease: 'Linear',
+            duration: 1000,
+        });
+        this.time.delayedCall(2000, () => {
+            this.scene.start('gameover');
+        });
     }
 
     scoreUP() {
@@ -244,43 +269,102 @@ class Play extends Phaser.Scene {
     spawn() {
         do {
             // option will be either 0, 1, 2, never repeating
-            this.option = Math.floor(Math.random() * 6);
+            this.option = Math.floor(Math.random() * 7);
         }
         while (this.option == this.preOption);  // will always pick a new pattern
 
-        if (this.option == 0) {
-            this.makeBranch(lane1);
-            this.makeBranch(lane3);
-            this.preOption = 0;
-        }
-        else if (this.option == 1) {
-            this.makeBranch(lane2);
-            this.makeBranch(lane1);
-            this.preOption = 1;
-        }
-        else if (this.option == 2) {
-            this.makeBird(lane3);
-            this.makeSnake(lane1);
-            this.preOption = 2;
-        }
-        else if (this.option == 3) {
-            this.makeBranch(lane2);
-            this.makeBranch(lane3);
-            this.makeSnake(lane1);
-            this.preOption = 3;
-        }
-        else if (this.option == 4) {
-            this.makeBranch(lane1);
-            this.makeBranch(lane2);
-            this.makeSnake(lane3);
-            this.preOption = 4;
-        }
-        else if(this.option == 5) {
-            this.makeBird(lane1);
-            this.makeBranch(lane2);
-            this.preOption = 5;
-        }
+        if(hardSpawn == 5) {
+            // harder spawn every 5 waves
+            hardSpawn = 0; // reset counter
+            if (this.option == 0) {
+                this.makeBranch(lane1);
+                this.makeBranch(lane3);
+                this.makeRock(lane2);
+                this.makeBird(lane1);
+            }
+            else if (this.option == 1) {
+                this.makeRock(lane1);
+                this.makeSnake(lane1);
+                this.makeBird(lane2);
+                this.makeRock(lane3);
+            }
+            else if (this.option == 2) {
+                this.makeBranch(lane3);
+                this.makeBranch(lane2);
+                this.makeRock(lane1);
+                this.makeBird(lane2);
+            }
+            else if (this.option == 3) {
+                this.makeRock(lane2);
+                this.makeBranch(lane3);
+                this.makeSnake(lane1);
+                this.makeBird(lane1);
+            }
+            else if (this.option == 4) {
+                this.makeRock(lane1);
+                this.makeBranch(lane2);
+                this.makeSnake(lane3);
+                this.makeBird(lane3);
+            }
+            else if(this.option == 5) {
+                this.makeBird(lane1);
+                this.makeBranch(lane2);
+                this.makeRock(lane1);
+                this.makeRock(lane3);
+            }
+            else if(this.option == 6) {
+                this.makeBird(lane3);
+                this.makeSnake(lane1);
+                this.makeRock(lane2);
+            }
 
+        }
+        else {
+            hardSpawn += 1;
+            // normal spawns
+            if (this.option == 0) {
+                this.makeBranch(lane1);
+                this.makeBranch(lane3);
+                this.makeRock(lane2);
+                this.preOption = 0;
+            }
+            else if (this.option == 1) {
+                this.makeBranch(lane1);
+                this.makeBranch(lane2);
+                this.preOption = 1;
+            }
+            else if (this.option == 2) {
+                this.makeBranch(lane3);
+                this.makeRock(lane1);
+                this.makeBird(lane2);
+                this.preOption = 2;
+            }
+            else if (this.option == 3) {
+                this.makeBranch(lane2);
+                this.makeRock(lane3);
+                this.makeSnake(lane1);
+                this.preOption = 3;
+            }
+            else if (this.option == 4) {
+                this.makeRock(lane1);
+                this.makeBranch(lane2);
+                this.makeSnake(lane3);
+                this.preOption = 4;
+            }
+            else if(this.option == 5) {
+                this.makeBird(lane1);
+                this.makeBranch(lane2);
+                this.makeRock(lane1);
+                this.preOption = 5;
+            }
+            else if(this.option == 6) {
+                this.makeBird(lane3);
+                this.makeSnake(lane1);
+                this.makeRock(lane2);
+                this.preOption = 6;
+            }
+        }
+        
         // play animations
         for (let snake of this.snakes) {
             if (snake.anims) {
@@ -304,7 +388,7 @@ class Play extends Phaser.Scene {
         }
     }
     makeRock(lane) {
-        this.rocks.push(new Rock(this, lane, -100, 'rock').setOrigin(0.5, 0));
+        this.rocks.push(new Rock(this, lane, -300, 'rock').setOrigin(0.5, 0));
     }
 }
 

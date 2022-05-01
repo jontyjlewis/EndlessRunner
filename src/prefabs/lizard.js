@@ -33,6 +33,7 @@ class Lizard extends Phaser.Physics.Arcade.Sprite {
          }
 
         if(this.isDash == true) {
+            // this.sfxMove.play();
             this.y -= this.moveSpeed;
         }
         else if(this.y < this.bottomOfScreen) {

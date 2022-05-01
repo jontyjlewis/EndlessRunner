@@ -11,7 +11,7 @@ let config = {
     physics: {
         default: 'arcade',
         arcade: {
-            debug: true
+            debug: false
         }
     },
     scene: [Preload, Menu, Play, Gameover],
@@ -26,8 +26,10 @@ let borderUISize = config.height / 30;  // should be 20px
 let borderpadding = borderUISize / 2;   // 10px
 
 let score;
-let highscore;
+let endScore;
+
 let gameSpeed = 3;
+let hardSpawn = 0;
 
 let lane1 = config.width/6;
 let lane2 = config.width/2;
