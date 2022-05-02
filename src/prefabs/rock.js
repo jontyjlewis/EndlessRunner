@@ -4,6 +4,7 @@ class Rock extends Phaser.Physics.Arcade.Sprite {
 
         scene.add.existing(this);   // adds object to the current scene
         scene.physics.add.existing(this);   // adds physics
+        this.setDepth(-1);
         this.moveSpeed = gameSpeed;
     }
 

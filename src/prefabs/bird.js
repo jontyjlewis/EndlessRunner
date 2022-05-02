@@ -9,7 +9,7 @@ class Bird extends Phaser.Physics.Arcade.Sprite {
         this.alert = false;
         this.setScale(0.7);
         this.sfxPlay = false;
-        this.sfxAttack = scene.sound.add('sfx_bird');
+        this.sfxAttack = scene.sound.add('sfx_bird', {volume: 0.4});
     }
 
     update() {

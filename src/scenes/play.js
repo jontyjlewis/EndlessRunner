@@ -15,7 +15,7 @@ class Play extends Phaser.Scene {
         this.time.delayedCall(1450, () => {
             this.tweens.add({
                 targets: this.bgm,
-                volume: 0.8,
+                volume: 0.3,
                 ease: 'Linear',
                 duration: 1000,
             });
@@ -24,6 +24,7 @@ class Play extends Phaser.Scene {
         //this.bgm.play();
         // background
         this.background = this.add.tileSprite(0, 0, 420, 600, 'background').setOrigin(0, 0);
+        this.background.setDepth(-2);
 
         // -- PLAYER / LIZARD ----
 
@@ -125,6 +126,8 @@ class Play extends Phaser.Scene {
             fontFamily: 'Impact',
             fontSize: '22px',
             color: '#FFFFFF',
+            stroke: '#000000',
+            strokeThickness: 4,
             align: 'left',
             padding: {
                 top: 5,

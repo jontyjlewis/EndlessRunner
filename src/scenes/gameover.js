@@ -8,6 +8,8 @@ class Gameover extends Phaser.Scene {
             fontFamily: 'Impact',
             fontSize: '28px',
             color: '#FFFFFF',
+            stroke: '#000000',
+            strokeThickness: 6,
             align: 'center',
             padding: {
                 top: 5,
@@ -27,7 +29,7 @@ class Gameover extends Phaser.Scene {
 
         this.add.text(game.config.width/2, game.config.height/3, "GAMEOVER", textConfig).setOrigin(0.5, 0.5);
         this.add.text(game.config.width/2, game.config.height/3 + 100, 'SCORE: ' + endScore, textConfig).setOrigin(0.5, 0.5);
-        this.add.text(game.config.width/2, game.config.height/2 + 175, "SPACE to restart", textConfig).setOrigin(0.5, 0.5);
+        this.add.text(game.config.width/2, game.config.height/2 + 175, "SPACE to Restart", textConfig).setOrigin(0.5, 0.5);
 
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         gameSpeed = 3;

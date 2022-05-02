@@ -8,6 +8,8 @@ class Menu extends Phaser.Scene {
             fontFamily: 'Impact',
             fontSize: '28px',
             color: '#FFFFFF',
+            stroke: '#000000',
+            strokeThickness: 6,
             align: 'center',
             padding: {
                 top: 5,
@@ -26,7 +28,7 @@ class Menu extends Phaser.Scene {
         this.border3 = this.add.tileSprite(0, 0, 420, 600, 'border3').setOrigin(0, 0);
 
         this.title = this.add.sprite(config.width/2, config.height/2, 'menuTitle').setOrigin(0.5).setScale(0.25);
-        this.add.text(game.config.width/2, game.config.height/2 + 150, "press SPACE to start", textConfig).setOrigin(0.5, 0.5);
+        this.add.text(game.config.width/2, game.config.height/2 + 150, "Press SPACE to Start", textConfig).setOrigin(0.5, 0.5);
 
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     }
@@ -39,7 +41,7 @@ class Menu extends Phaser.Scene {
         
         if(Phaser.Input.Keyboard.JustDown(keySPACE)) {
             this.scene.start('play');
-            this.sound.play('sfx_menu');
+            this.sound.play('sfx_menu', {volume: 0.4});
         }
     }
 }
