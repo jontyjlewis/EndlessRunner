@@ -119,7 +119,7 @@ class Play extends Phaser.Scene {
         this.add.rectangle(0, 0, game.config.width, borderUISize * 2 + borderpadding, 0x013220).setOrigin(0, 0);
 
         // initialize score
-        score = 0;
+        //score = 0;
 
         // display score counter
         let scoreConfig = {
@@ -299,8 +299,13 @@ class Play extends Phaser.Scene {
 
     scoreUP() {
         // console.log("scoreUP");
-        if(!training) {
-            // score = 0;
+        if(this.gameoverFlag == true) {
+            score = endScore;
+        }
+        else if(!training) {
+            if(!score) {
+                score = 0;
+            }
             this.trainingSkip.setVisible(false);
             this.scoreText.setVisible(true);
             this.speedCounter.setVisible(true);
