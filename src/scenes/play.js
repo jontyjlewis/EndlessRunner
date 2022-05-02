@@ -11,6 +11,7 @@ class Play extends Phaser.Scene {
             loop: true
         });
 
+        // wait for the intro to finish
         this.time.delayedCall(1450, () => {
             this.tweens.add({
                 targets: this.bgm,
@@ -42,6 +43,9 @@ class Play extends Phaser.Scene {
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+
+        // training keybind
+        keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
         // -- END OF PLAYER -----
 
@@ -119,18 +123,21 @@ class Play extends Phaser.Scene {
         // display score counter
         let scoreConfig = {
             fontFamily: 'Impact',
-            fontSize: '28px',
+            fontSize: '22px',
             color: '#FFFFFF',
             align: 'left',
             padding: {
                 top: 5,
                 bottom: 5,
             },
-            fixedWidth: 100
+            fixedWidth: 300
         }
 
-        this.add.text(game.config.width / 4, borderpadding, 'SCORE: ', scoreConfig);
-        this.scoreCounter = this.add.text(game.config.width / 2, borderpadding, score, scoreConfig);
+        this.scoreText = this.add.text(game.config.width / 6, borderpadding, 'SCORE: ', scoreConfig).setVisible(false);
+        this.scoreCounter = this.add.text(game.config.width / 3, borderpadding, score, scoreConfig);
+        this.speedText = this.add.text(lane3 - 80, borderpadding, 'SPEED x', scoreConfig).setVisible(false);
+        this.speedCounter = this.add.text(lane3 - 10, borderpadding, multiplier, scoreConfig).setVisible(false);
+        this.trainingSkip = this.add.text(lane1, borderpadding * 5 + borderUISize, 'PRESS SPACE TO SKIP TRAINING', scoreConfig);
 
         // increment score every second
         this.increaseScore = this.time.addEvent({
@@ -170,6 +177,16 @@ class Play extends Phaser.Scene {
         this.tutorial(this.tutorialW);
 
         if (!this.gameoverFlag) {
+            if(training) {
+                // tutorial skip
+                if(Phaser.Input.Keyboard.JustDown(keySPACE)) {
+                    training = false;
+                    trainSpawn = 7;
+                    gameSpeed = 3;
+                    multiplier = 1;
+                }
+            }
+            
             // background
             this.background.tilePositionY -= gameSpeed;
             this.border1.tilePositionY -= gameSpeed;
@@ -257,7 +274,7 @@ class Play extends Phaser.Scene {
     }
 
     tutorial(keyTexture) {
-        this.time.delayedCall(2000, () => {
+        this.time.delayedCall(2500, () => {
                 keyTexture.destroy();
         });
     }
@@ -279,110 +296,161 @@ class Play extends Phaser.Scene {
 
     scoreUP() {
         // console.log("scoreUP");
-        score += 10;
-        this.scoreCounter.text = score;
+        if(!training) {
+            // score = 0;
+            this.trainingSkip.setVisible(false);
+            this.scoreText.setVisible(true);
+            this.speedCounter.setVisible(true);
+            this.speedText.setVisible(true);
+            score += 10 * multiplier;
+            this.scoreCounter.text = score;
+            this.speedCounter.text = multiplier;
+        }
+        else {
+            this.scoreCounter.text = trainingText;
+        }
     }
 
     speedUP() {
         gameSpeed += 0.5;
+        multiplier += 0.5;
     }
 
     spawn() {
-        do {
-            // option will be either 0, 1, 2, never repeating
-            this.option = Math.floor(Math.random() * 7);
-        }
-        while (this.option == this.preOption);  // will always pick a new pattern
-
-        if(hardSpawn == 5) {
-            // harder spawn every 5 waves
-            hardSpawn = 0; // reset counter
-            if (this.option == 0) {
-                this.makeBranch(lane1);
-                this.makeBranch(lane3);
-                this.makeRock(lane2);
-                this.makeBird(lane1);
+        // Training only happens on the first launch of the game
+        // replaying from the end screen doesn't trigger again
+        // score doesn't increment during this time
+        if(training == true) {
+            // introduce each mechanic before play
+            if(trainSpawn == 1) {
+                // spawn branches
+                this.makeBranch(lane2);
+                trainSpawn += 1;
+                trainingText = 'Avoid Branches';
             }
-            else if (this.option == 1) {
-                this.makeRock(lane1);
-                this.makeSnake(lane1);
+            else if(trainSpawn == 2) {
+                // spawn bird
                 this.makeBird(lane2);
-                this.makeRock(lane3);
+                trainSpawn += 1;
+                trainingText = 'Watch for birds behind';
             }
-            else if (this.option == 2) {
-                this.makeBranch(lane3);
-                this.makeBranch(lane2);
-                this.makeRock(lane1);
-                this.makeBird(lane2);
-            }
-            else if (this.option == 3) {
-                this.makeRock(lane2);
-                this.makeBranch(lane3);
+            else if(trainSpawn == 3) {
+                // spawn snake
                 this.makeSnake(lane1);
-                this.makeBird(lane1);
+                trainSpawn += 1;
+                trainingText = 'Dash (W) past the snake';
             }
-            else if (this.option == 4) {
-                this.makeRock(lane1);
-                this.makeBranch(lane2);
-                this.makeSnake(lane3);
-                this.makeBird(lane3);
-            }
-            else if(this.option == 5) {
-                this.makeBird(lane1);
-                this.makeBranch(lane2);
-                this.makeRock(lane1);
-                this.makeRock(lane3);
-            }
-            else if(this.option == 6) {
-                this.makeBird(lane3);
-                this.makeSnake(lane1);
+            else if(trainSpawn == 4) {
+                // make rock
                 this.makeRock(lane2);
+                trainSpawn += 1;
+                trainingText = 'Avoid Rocks';
             }
-
+            else if(trainSpawn == 5) {
+                trainSpawn += 1;
+                trainingText = "Goodluck!";
+            }
+            else if(trainSpawn == 6) {
+                training = false;
+            }
         }
         else {
-            hardSpawn += 1;
-            // normal spawns
-            if (this.option == 0) {
-                this.makeBranch(lane1);
-                this.makeBranch(lane3);
-                this.makeRock(lane2);
-                this.preOption = 0;
+            do {
+                // option will be either 0, 1, 2, never repeating
+                this.option = Math.floor(Math.random() * 7);
             }
-            else if (this.option == 1) {
-                this.makeBranch(lane1);
-                this.makeBranch(lane2);
-                this.preOption = 1;
+            while (this.option == this.preOption);  // will always pick a new pattern
+    
+            if(hardSpawn == 5) {
+                // harder spawn every 5 waves
+                hardSpawn = 0; // reset counter
+                if (this.option == 0) {
+                    this.makeBranch(lane1);
+                    this.makeBranch(lane3);
+                    this.makeRock(lane2);
+                    this.makeBird(lane1);
+                }
+                else if (this.option == 1) {
+                    this.makeRock(lane1);
+                    this.makeSnake(lane1);
+                    this.makeBird(lane3);
+                    this.makeBranch(lane3);
+                }
+                else if (this.option == 2) {
+                    this.makeBranch(lane3);
+                    this.makeBranch(lane2);
+                    this.makeRock(lane1);
+                    this.makeBird(lane2);
+                }
+                else if (this.option == 3) {
+                    this.makeRock(lane2);
+                    this.makeBranch(lane3);
+                    this.makeSnake(lane1);
+                    this.makeBird(lane1);
+                }
+                else if (this.option == 4) {
+                    this.makeRock(lane1);
+                    this.makeBranch(lane2);
+                    this.makeSnake(lane3);
+                    this.makeBird(lane3);
+                }
+                else if(this.option == 5) {
+                    this.makeBird(lane1);
+                    this.makeBranch(lane2);
+                    this.makeRock(lane1);
+                    this.makeRock(lane3);
+                }
+                else if(this.option == 6) {
+                    this.makeBird(lane3);
+                    this.makeSnake(lane1);
+                    this.makeRock(lane2);
+                }
+    
             }
-            else if (this.option == 2) {
-                this.makeBranch(lane3);
-                this.makeRock(lane1);
-                this.makeBird(lane2);
-                this.preOption = 2;
-            }
-            else if (this.option == 3) {
-                this.makeBranch(lane2);
-                this.makeRock(lane3);
-                this.makeSnake(lane1);
-                this.preOption = 3;
-            }
-            else if (this.option == 4) {
-                this.makeRock(lane1);
-                this.makeBranch(lane2);
-                this.makeSnake(lane3);
-                this.preOption = 4;
-            }
-            else if(this.option == 5) {
-                this.makeBird(lane1);
-                this.makeBranch(lane2);
-                this.makeRock(lane1);
-                this.preOption = 5;
-            }
-            else if(this.option == 6) {
-                this.makeBird(lane3);
-                this.makeSnake(lane1);
-                this.makeRock(lane2);
-                this.preOption = 6;
+            else {
+                hardSpawn += 1;
+                // normal spawns
+                if (this.option == 0) {
+                    this.makeBranch(lane1);
+                    this.makeBranch(lane3);
+                    this.makeRock(lane2);
+                    this.preOption = 0;
+                }
+                else if (this.option == 1) {
+                    this.makeBranch(lane1);
+                    this.makeBranch(lane2);
+                    this.preOption = 1;
+                }
+                else if (this.option == 2) {
+                    this.makeBranch(lane3);
+                    this.makeRock(lane1);
+                    this.makeBird(lane2);
+                    this.preOption = 2;
+                }
+                else if (this.option == 3) {
+                    this.makeBranch(lane2);
+                    this.makeRock(lane3);
+                    this.makeSnake(lane1);
+                    this.preOption = 3;
+                }
+                else if (this.option == 4) {
+                    this.makeRock(lane1);
+                    this.makeBranch(lane2);
+                    this.makeSnake(lane3);
+                    this.preOption = 4;
+                }
+                else if(this.option == 5) {
+                    this.makeBird(lane1);
+                    this.makeBranch(lane2);
+                    this.makeRock(lane1);
+                    this.preOption = 5;
+                }
+                else if(this.option == 6) {
+                    this.makeBird(lane3);
+                    this.makeSnake(lane1);
+                    this.makeRock(lane2);
+                    this.preOption = 6;
+                }
             }
         }
         

@@ -29,9 +29,13 @@ let borderpadding = borderUISize / 2;   // 10px
 
 let score;
 let endScore;
+let multiplier = 0.5;
 
-let gameSpeed = 3;
+let gameSpeed = 2.5;
 let hardSpawn = 0;
+let training = true;
+let trainSpawn = 1;
+let trainingText;
 
 let lane1 = config.width/6;
 let lane2 = config.width/2;

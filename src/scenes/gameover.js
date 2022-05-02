@@ -32,6 +32,13 @@ class Gameover extends Phaser.Scene {
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         gameSpeed = 3;
         hardSpawn = 0;
+        multiplier = 1;
+
+        if(training == true) {
+            trainSpawn = 1;
+            gameSpeed = 2.5
+            multiplier = 0.5;
+        }
     }
 
     update() {
@@ -39,7 +46,7 @@ class Gameover extends Phaser.Scene {
         this.border1.tilePositionY -= gameSpeed;
         this.border2.tilePositionY -= gameSpeed + 0.3;
         this.border3.tilePositionY -= gameSpeed + 0.5;
-        
+
         if(Phaser.Input.Keyboard.JustDown(keySPACE)) {
             this.scene.start('play');
             this.sound.play('sfx_menu');
