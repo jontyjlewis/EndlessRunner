@@ -39,7 +39,7 @@ class Play extends Phaser.Scene {
         this.p1Lizard.setScale(0.7);
         this.p1Lizard.play({ key: 'walk', repeat: -1 });
         this.p1Lizard.body.setSize(20, 60);
-        this.p1Lizard.body.setOffset(60,30);
+        this.p1Lizard.body.setOffset(60,30);    // adjusts lizards hitbox
 
         // Player/Lizard Keybinds
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -212,7 +212,7 @@ class Play extends Phaser.Scene {
             for (let i = 0; i < this.branches.length; i++) {
                 this.branches[i].update();
                 if (this.physics.collide(this.p1Lizard, this.branches[i])) {
-                    console.log("hit Branch");
+                    //console.log("hit Branch");
                     this.gameoverFlag = true;
                     this.gameOver();
                 }
@@ -249,7 +249,7 @@ class Play extends Phaser.Scene {
                     this.alert3.alpha = 0;
                 }
                 if (this.physics.collide(this.p1Lizard, this.birds[i])) {
-                    console.log("hit Bird");
+                    //console.log("hit Bird");
                     this.gameoverFlag = true;
                     this.gameOver();
                 }
@@ -259,7 +259,7 @@ class Play extends Phaser.Scene {
             for (let i = 0; i < this.snakes.length; i++) {
                 this.snakes[i].update();
                 if (this.physics.collide(this.p1Lizard, this.snakes[i]) && this.snakes[i].attack == true) {
-                    console.log("hit Snake");
+                    //console.log("hit Snake");
                     this.gameoverFlag = true;
                     this.gameOver();
                 }
@@ -269,7 +269,7 @@ class Play extends Phaser.Scene {
             for (let i = 0; i < this.rocks.length; i++) {
                 this.rocks[i].update();
                 if (this.physics.collide(this.p1Lizard, this.rocks[i])) {
-                    console.log("hit Rock");
+                    //console.log("hit Rock");
                     this.gameoverFlag = true;
                     this.gameOver();
                 }
