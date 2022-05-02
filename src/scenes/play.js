@@ -285,6 +285,7 @@ class Play extends Phaser.Scene {
 
     // when you lose
     gameOver() {
+        this.sound.play('sfx_death');
         endScore = score;
         this.p1Lizard.anims.stop(null, true);
         this.tweens.add({
