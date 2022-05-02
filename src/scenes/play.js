@@ -35,10 +35,11 @@ class Play extends Phaser.Scene {
             frameRate: 6
         })
         // Player/Lizard
-        this.p1Lizard = new Lizard(this, lane2, row0, 'lizard').setOrigin(0.5, 0);
+        this.p1Lizard = new Lizard(this, lane2, row0, 'lizard').setOrigin(0.5, 0.5);
         this.p1Lizard.setScale(0.7);
         this.p1Lizard.play({ key: 'walk', repeat: -1 });
-        this.p1Lizard.body.setSize(90, 70);
+        this.p1Lizard.body.setSize(20, 60);
+        this.p1Lizard.body.setOffset(60,30);
 
         // Player/Lizard Keybinds
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
