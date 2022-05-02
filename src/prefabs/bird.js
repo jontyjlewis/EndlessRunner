@@ -4,7 +4,8 @@ class Bird extends Phaser.Physics.Arcade.Sprite {
 
         scene.add.existing(this);   // adds object to the current scene
         scene.physics.add.existing(this);   // adds physics
-        this.moveSpeed = 9;
+        //this.moveSpeed = 9;
+        this.moveSpeed = gameSpeed + 6;
         this.birdActive = false;
         this.alert = false;
         this.setScale(0.7);
