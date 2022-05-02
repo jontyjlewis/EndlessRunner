@@ -1,8 +1,31 @@
+// **********************************************************************************************
+// **********************************************************************************************
+//
+// Game Title: Lizard Quest
+//
 // Developers:  Jonathan Lewis
-//              Jacqui
-//              Lucas
-// Date: Started 4/13/2022
+//              Jacqui Goodykoontz
+//              Lucas Moore
+//
+// Date: Started  - 4/13/2022
+//       Finished - 5/2/2022
+//
+// Creative Tilt: 
+//      - Programming:  Particularly proud of the random spawning solution we ended up using.
+//                      It calls from a list of preset spawn options to send down the screen
+//                      with a "harder" wave every 5 seconds.  Along side speed increases 
+//                      every 15 seconds, it gives a randomized and different experience 
+//                      each run you play.
+// 
+//      - Visual:       We're really proud of the panel art our game uses in the webpage
+//                      It helps set our theme of the type of game you could find in an arcade
+//                      where the panel art would be on the side of the machine and be
+//                      recognizable.
+//
 // Project: Endless Runner for CMPM 120 / ARTG 120 @ UCSC Spring 2022
+//
+// **********************************************************************************************
+// **********************************************************************************************
 
 let config = {
     type: Phaser.CANVAS,
