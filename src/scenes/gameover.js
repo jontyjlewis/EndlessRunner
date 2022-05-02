@@ -33,6 +33,7 @@ class Gameover extends Phaser.Scene {
         gameSpeed = 3;
         hardSpawn = 0;
         multiplier = 1;
+        training = true;
 
         if(training == true) {
             trainSpawn = 1;
