@@ -24,7 +24,7 @@ class Play extends Phaser.Scene {
         //this.bgm.play();
         // background
         this.background = this.add.tileSprite(0, 0, 420, 600, 'background').setOrigin(0, 0);
-        this.background.setDepth(-2);
+        this.background.setDepth(-3);
 
         // -- PLAYER / LIZARD ----
 
@@ -79,6 +79,15 @@ class Play extends Phaser.Scene {
         this.alert1.alpha = 0
         this.alert2.alpha = 0
         this.alert3.alpha = 0
+        this.tweens.add({
+            targets: [this.alert1, this.alert2, this.alert3],
+            scale: {from: 1, to: 1.5},
+            y: 500,
+            duration: 500,
+            yoyo: true,
+            ease: 'Sine.easeInOut',
+            repeat: -1,
+        });
 
 
         // -- SNAKE --
@@ -95,7 +104,6 @@ class Play extends Phaser.Scene {
         for (let snake of this.snakes) {
             snake.anims.play({ key: 'slithering', repeat: -1 });
         }
-
 
         // -- ROCK --
         // Rock Animation Controller
@@ -181,6 +189,9 @@ class Play extends Phaser.Scene {
         this.tutorial(this.tutorialW);
 
         if (!this.gameoverFlag) {
+            if(this.p1Lizard.moved == true) {
+                this.moved();
+            }
             if(training) {
                 // tutorial skip
                 if(Phaser.Input.Keyboard.JustDown(keySPACE)) {
@@ -488,6 +499,19 @@ class Play extends Phaser.Scene {
     }
     makeRock(lane) {
         this.rocks.push(new Rock(this, lane, -300, 'rock').setOrigin(0.5, 0));
+    }
+
+    moved() {
+        if(this.p1Lizard.moved) {
+            this.p1Lizard.moved = false;
+
+            this.tweens.add({
+                targets: this.p1Lizard,
+                scaleX: {from: 0.7, to: 0.9},
+                duration: 150,
+                yoyo: true,
+            });
+        }
     }
 }
 

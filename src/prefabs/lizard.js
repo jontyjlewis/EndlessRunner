@@ -5,15 +5,20 @@ class Lizard extends Phaser.Physics.Arcade.Sprite {
 
         scene.add.existing(this);   // add object to the existing scene
         scene.physics.add.existing(this);   // adds physics
-        this.isJumping = false;          // jumping logic
+        this.moved = false;
+        this.moveLeft = false;
+        this.moveRight = false;
         this.isDash = false;
         this.moveSpeed = 4;
         this.bottomOfScreen = game.config.height - borderUISize - borderpadding * 10;
         this.sfxMove = scene.sound.add('sfx_dash', {volume: 0.2});
+        
     }
 
     update() {
         if(Phaser.Input.Keyboard.JustDown(keyA)){
+            this.moved = true;
+            this.moveLeft = true;
             if(this.x === lane2) {
                 this.x = lane1;
                 this.sfxMove.play();
@@ -23,6 +28,8 @@ class Lizard extends Phaser.Physics.Arcade.Sprite {
             }
         }
         else if(Phaser.Input.Keyboard.JustDown(keyD)){
+            this.moved = true;
+            this.moveRight = true;
             if(this.x === lane2){ 
                 this.x = lane3;
                 this.sfxMove.play();

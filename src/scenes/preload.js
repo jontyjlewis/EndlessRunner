@@ -30,10 +30,10 @@ class Preload extends Phaser.Scene {
             startFrame: 0, 
             endFrame: 3
         });
-        // birb
+        // bird
         this.load.image('bird', './assets/bird.png');
         this.load.image('alert', './assets/alert.png');
-        // dwayne johnson
+        // rock
         this.load.spritesheet('rock', './assets/rock.png', {
             frameWidth: 100,
             frameHeight: 95,
@@ -50,7 +50,10 @@ class Preload extends Phaser.Scene {
         this.load.image('menuTitle', './assets/menuTitle.png');
         this.load.image('tutorialA', './assets/menuA.png');
         this.load.image('tutorialW', './assets/tutorialW.png');
-        this.load.image('tutorialD', './assets/tutorialD.png');      
+        this.load.image('tutorialD', './assets/tutorialD.png');  
+        
+        // particle
+        this.load.image('leaf', './assets/leaf_particle.png');
     }
 
     update() {
